@@ -1,16 +1,17 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+@section('title', 'Ajouter un enseignant')
 
-            <div class="card shadow-sm">
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 style="color:#170B9DFF;">
                         <i class="fas fa-user-plus me-2"></i> Ajouter un enseignant
                     </h4>
-                    <a href="{{ route('teachers.index') }}" class="btn btn-sm btn-secondary">
+                    <a href="{{ route('enseignants') }}" class="btn btn-sm btn-secondary">
                         <i class="fas fa-arrow-left"></i> Retour
                     </a>
                 </div>
@@ -28,7 +29,7 @@
                     @endif
 
                     {{-- Formulaire --}}
-                    <form action="{{ route('teachers.store') }}" method="POST">
+                    <form action="{{ route('enseignants.store') }}" method="POST">
                         @csrf
 
                         {{-- Titre --}}

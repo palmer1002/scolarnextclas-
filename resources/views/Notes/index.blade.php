@@ -524,6 +524,8 @@
                         <option value="T1" selected>Trimestre 1</option>
                         <option value="T2">Trimestre 2</option>
                         <option value="T3">Trimestre 3</option>
+                        <option value="T2">Semestre 1</option>
+                        <option value="T3">Semestre 2</option>
                         <option value="A">Annuel</option>
                     </select>
                 </div>

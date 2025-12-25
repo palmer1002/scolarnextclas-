@@ -107,15 +107,27 @@
             padding: 10px;
             margin-bottom: 8px;
         }
+
+        .logo img { width: 80px;
+             height: 80px;
+             border-radius: 12px;
+             display: block; margin: 0 auto 10px auto;
+            }
+         .logo h3 { font-size: 20px;
+             margin-top: 5px; }
+
+         .sidebar { text-align: center;
+            }   
     </style>
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="logo">
-            <span>$</span>
-            <h3>ScolarNextClas</h>
-        </div>
+    
+            <span><img src="{{ asset('images/logo.png') }}" alt="Logo ScolarNextClas" style="width:100px; height:100px; border-radius:8px;"></span>
+
+            <h3>ScolarNextClas</h3>
+      
         <ul>
             <li class="active">
     <a href="/" style="color: white; text-decoration: none; display: flex; align-items: center;">

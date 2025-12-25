@@ -1,16 +1,17 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+@section('title', 'Modifier un enseignant')
 
-            <div class="card shadow-sm">
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 style="color:#170B9DFF;">
                         <i class="fas fa-user-edit me-2"></i> Modifier l'enseignant
                     </h4>
-                    <a href="{{ route('teachers.index') }}" class="btn btn-sm btn-secondary">
+                    <a href="{{ route('enseignants') }}" class="btn btn-sm btn-secondary">
                         <i class="fas fa-arrow-left"></i> Retour
                     </a>
                 </div>
@@ -28,7 +29,7 @@
                     @endif
 
                     {{-- Formulaire de modification --}}
-                    <form action="{{ route('teachers.update', $teacher->id) }}" method="POST">
+                    <form action="{{ route('enseignants.update', $teacher->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 

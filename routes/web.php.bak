@@ -1,0 +1,224 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaiementController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EleveController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserAccessController;
+use App\Http\Controllers\EnseignantController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Routes protégées par authentification
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Dashboard
+    Route::get('/', function () {
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            return view('Dashboard.index');
+        } elseif (Auth::check()) {
+            return view('Dashboard.user_dashboard');
+        } else {
+            return redirect()->route('login');
+        }
+    })->name('dashboard');
+
+    // Élèves
+    Route::prefix('eleves')->name('eleves.')->group(function () {
+        Route::get('/', function () {
+            return view('eleves.index');
+        })->name('index');
+
+        Route::get('/create', [EleveController::class, 'create'])->name('create');
+        Route::post('/', [EleveController::class, 'store'])->name('store');
+        Route::get('/{id}', [EleveController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [EleveController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [EleveController::class, 'update'])->name('update');
+        Route::delete('/{id}', [EleveController::class, 'destroy'])->name('destroy');
+
+        // Sous-routes pour les fonctionnalités liées aux élèves
+        Route::prefix('{id}')->group(function () {
+            Route::get('/paiement', [EleveController::class, 'paiement'])->name('paiement');
+            Route::post('/paiement', [EleveController::class, 'storePaiement'])->name('paiement.store');
+
+            Route::get('/note', [EleveController::class, 'note'])->name('note');
+            Route::post('/note', [EleveController::class, 'storeNote'])->name('note.store');
+
+            Route::get('/bulletin', [EleveController::class, 'bulletin'])->name('bulletin');
+            Route::post('/bulletin', [EleveController::class, 'storeBulletin'])->name('bulletin.store');
+
+            Route::get('/absence', [EleveController::class, 'absence'])->name('absence');
+            Route::post('/absence', [EleveController::class, 'storeAbsence'])->name('absence.store');
+
+            Route::get('/presence', [EleveController::class, 'presence'])->name('presence');
+            Route::post('/presence', [EleveController::class, 'storePresence'])->name('presence.store');
+        });
+    });
+
+    // Notes
+    Route::get('/notes', function () {
+        return view('Notes.index');
+    })->name('notes');
+
+    // Bulletins
+    Route::get('/bulletins', function () {
+        return view('Bulletins.index');
+    })->name('bulletins');
+
+    // Paiements
+    Route::prefix('paiements')->name('paiements.')->group(function () {
+        Route::get('/', function () {
+            return view('Paiements.index');
+        })->name('index');
+
+        Route::get('/create', function () {
+            return view('Paiements.create');
+        })->name('create');
+
+        Route::get('/{id}', function ($id) {
+            return view('Paiements.show', ['id' => $id]);
+        })->name('show');
+
+        Route::get('/{id}/edit', function ($id) {
+            return view('Paiements.edit', ['id' => $id]);
+        })->name('edit');
+    });
+
+    // Enseignants
+    Route::prefix('enseignants')->name('enseignants.')->group(function () {
+        Route::get('/', function () {
+            return view('Enseignants.index');
+        })->name('index');
+
+        Route::get('/create', function () {
+            return view('Enseignants.create');
+        })->name('create');
+
+        Route::post('/', function () {
+            return redirect()->route('enseignants.index');
+        })->name('store');
+
+        Route::get('/{id}', function ($id) {
+            return view('Enseignants.show', ['id' => $id]);
+        })->name('show');
+
+        Route::get('/{id}/edit', function ($id) {
+            return view('Enseignants.edit', ['id' => $id]);
+        })->name('edit');
+
+        Route::put('/{id}', function ($id) {
+            return redirect()->route('enseignants.index');
+        })->name('update');
+
+        Route::delete('/{id}', function ($id) {
+            return redirect()->route('enseignants.index');
+        })->name('destroy');
+    });
+
+    // Parents
+    Route::prefix('parents')->name('parents.')->group(function () {
+        Route::get('/', function () {
+            return view('Parents.index');
+        })->name('index');
+
+        Route::get('/create', function () {
+            return view('Parents.create');
+        })->name('create');
+
+        Route::post('/', function () {
+            return redirect()->route('parents.index');
+        })->name('store');
+
+        Route::get('/{id}', function ($id) {
+            return view('Parents.show', ['id' => $id]);
+        })->name('show');
+
+        Route::get('/{id}/edit', function ($id) {
+            return view('Parents.edit', ['id' => $id]);
+        })->name('edit');
+
+        Route::put('/{id}', function ($id) {
+            return redirect()->route('parents.index');
+        })->name('update');
+
+        Route::delete('/{id}', function ($id) {
+            return redirect()->route('parents.index');
+        })->name('destroy');
+    });
+
+    // Utilisateurs
+    Route::prefix('utilisateurs')->name('utilisateurs.')->group(function () {
+        Route::get('/', [UserAccessController::class, 'index'])->name('index');
+        Route::get('/create', [UserAccessController::class, 'create'])->name('create');
+        Route::post('/', [UserAccessController::class, 'store'])->name('store');
+        Route::get('/{id}', [UserAccessController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [UserAccessController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [UserAccessController::class, 'update'])->name('update');
+        Route::delete('/{id}', [UserAccessController::class, 'destroy'])->name('destroy');
+    });
+
+    // Administration
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/db-check', function () {
+            return view('Admin.db-check');
+        })->name('db-check');
+    });
+
+    // Routes pour les enseignants
+    Route::middleware(['auth', 'role:admin,enseignant'])->group(function () {
+        Route::prefix('enseignants')->name('enseignants.')->group(function () {
+            Route::get('/', [EnseignantController::class, 'index'])->name('index');
+            Route::get('/create', [EnseignantController::class, 'create'])->name('create');
+            Route::get('/{id}', [EnseignantController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [EnseignantController::class, 'edit'])->name('edit');
+        });
+    });
+
+    // Routes pour les parents
+    Route::middleware(['auth', 'role:admin,parent'])->group(function () {
+        Route::prefix('parents')->name('parents.')->group(function () {
+            Route::get('/', function () {
+                return view('Parents.index');
+            })->name('index');
+            
+            Route::get('/create', function () {
+                return view('Parents.create');
+            })->name('create');
+            
+            Route::get('/{id}', function ($id) {
+                return view('Parents.show', ['id' => $id]);
+            })->name('show');
+            
+            Route::get('/{id}/edit', function ($id) {
+                return view('Parents.edit', ['id' => $id]);
+            })->name('edit');
+        });
+    });
+
+    // Routes pour les élèves
+    Route::middleware(['auth', 'role:admin,eleve'])->group(function () {
+        Route::prefix('eleves')->name('eleves.')->group(function () {
+            Route::get('/', function () {
+                return view('Eleves.index');
+            })->name('index');
+            
+            Route::get('/create', [EleveController::class, 'create'])->name('create');
+            Route::post('/', [EleveController::class, 'store'])->name('store');
+            Route::get('/{id}', [EleveController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [EleveController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [EleveController::class, 'update'])->name('update');
+            Route::delete('/{id}', [EleveController::class, 'destroy'])->name('destroy');
+        });
+    });
+});
