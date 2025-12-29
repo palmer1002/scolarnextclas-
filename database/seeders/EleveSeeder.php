@@ -1,34 +1,59 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Seeders;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Seeder;
+use App\Models\Eleve;
+use App\Models\Classe;
 
-class EleveFactory extends Factory
+class EleveSeeder extends Seeder
 {
-    public function definition()
+    public function run(): void
     {
-        return [
-            'matricule' => 'SNC' . date('Y') . str_pad($this->faker->unique()->numberBetween(1, 999), 4, '0', STR_PAD_LEFT),
-            'prenom' => $this->faker->firstName(),
-            'nom' => $this->faker->lastName(),
-            'genre' => $this->faker->randomElement(['Masculin', 'Féminin']),
-            'date_naissance' => $this->faker->dateTimeBetween('-18 years', '-6 years'),
-            'lieu_naissance' => $this->faker->city(),
-            'adresse' => $this->faker->address(),
-            'telephone' => '+228 ' . $this->faker->regexify('[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}'),
-            'email' => $this->faker->unique()->safeEmail(),
-            'parent_nom' => $this->faker->name(),
-            'parent_relation' => $this->faker->randomElement(['Père', 'Mère', 'Tuteur']),
-            'parent_telephone' => '+228 ' . $this->faker->regexify('[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}'),
-            'parent_email' => $this->faker->safeEmail(),
-            'parent_adresse' => $this->faker->address(),
-            'parent_profession' => $this->faker->jobTitle(),
-            'classe_id' => \App\Models\Classe::inRandomOrder()->first()->id,
-            'date_inscription' => $this->faker->dateTimeBetween('-1 year'),
-            'statut' => 'actif',
-            'notes' => $this->faker->sentence(),
-            'groupe_sanguin' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+        // Créer quelques classes
+        $classe4A = Classe::firstOrCreate(['nom' => '4e A']);
+        $classeTleD = Classe::firstOrCreate(['nom' => 'Tle D']);
+        $classe3C = Classe::firstOrCreate(['nom' => '3e C']);
+
+        // Créer des élèves
+        $eleves = [
+            [
+                'matricule' => 'SNC2024001',
+                'nom' => 'Diallo',
+                'prenom' => 'Amina',
+                'classe_id' => $classe4A->id,
+                'genre' => 'Féminin',
+                'date_inscription' => '2024-09-01',
+                'parent_nom' => 'Papa Diallo',
+                'parent_relation' => 'Père',
+                'parent_telephone' => '+228 90 90 90 90'
+            ],
+            [
+                'matricule' => 'SNC2024002',
+                'nom' => 'Kokoroko',
+                'prenom' => 'Ray',
+                'classe_id' => $classeTleD->id,
+                'genre' => 'Masculin',
+                'date_inscription' => '2024-09-05',
+                'parent_nom' => 'Maman Kokoroko',
+                'parent_relation' => 'Mère',
+                'parent_telephone' => '+228 90 90 90 90'
+            ],
+            [
+                'matricule' => 'SNC2024003',
+                'nom' => 'Klanlenou',
+                'prenom' => 'Arnaud',
+                'classe_id' => $classe3C->id,
+                'genre' => 'Masculin',
+                'date_inscription' => '2024-09-10',
+                'parent_nom' => 'Tuteur Klanlenou',
+                'parent_relation' => 'Tuteur',
+                'parent_telephone' => '+228 90 90 90 90'
+            ]
         ];
+
+        foreach ($eleves as $eleveData) {
+            Eleve::firstOrCreate(['matricule' => $eleveData['matricule']], $eleveData);
+        }
     }
 }

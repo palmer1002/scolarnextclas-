@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Note extends Model
+class Bulletin extends Model
 {
     use HasFactory;
 
@@ -13,17 +13,8 @@ class Note extends Model
         'eleve_id',
         'trimestre',
         'semestre',
-        'matiere',
-        'note',
-        'coefficient',
+        'moyenne',
         'annee_scolaire',
-    ];
-
-    protected $casts = [
-        'note' => 'float',
-        'trimestre' => 'integer',
-        'semestre' => 'integer',
-        'coefficient' => 'integer',
     ];
 
     // Relation avec Eleve

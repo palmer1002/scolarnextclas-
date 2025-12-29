@@ -72,7 +72,7 @@
             <h3>ScolarNextClas</h3>
         </div>
         <ul>
-            <li class="{{ request()->is('/') ? 'active' : '' }}">
+            <li class="{{ request()->is('/') || request()->is('dashboard*') ? 'active' : '' }}">
                 <a href="{{ route('dashboard') }}" style="color: white; text-decoration: none; display: flex; align-items: center;">
                     <i class="fas fa-chart-pie" style="margin-right: 10px;"></i> Tableau de bord
                 </a>

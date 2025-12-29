@@ -11,20 +11,15 @@ use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PasswordResetController;
 
 /*
-|-
+|--------------------------------------------------------------------------
 | Web Routes
-|-----
+|--------------------------------------------------------------------------
 */
 
         // Authentication routes
         Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-        
-        // Email Verification Routes
-        Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->name('verification.notice');
-        Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
-        Route::post('/email/verification-notification', [AuthController::class, 'resend'])->middleware(['throttle:6,1'])->name('verification.send');
         
         // Password Reset Routes
         Route::get('/password/reset', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
@@ -35,6 +30,9 @@ use App\Http\Controllers\PasswordResetController;
         // Dashboard
 
          Route::get('/', function () {
+            if (auth()->check() && auth()->user()->role === 'admin') {
+                return redirect('/dashboard/admin');
+            }
             return view('Dashboard.index');
                  })->name('dashboard');
 
@@ -47,6 +45,8 @@ use App\Http\Controllers\PasswordResetController;
 Route::resource('parents', ParentController::class)->parameters(['parents' => 'parent']);
 
 
+// Paiements routes
+Route::resource('paiements', PaiementController::class)->parameters(['paiements' => 'paiement']);
 
         Route::get('/bulletins', function () {
             return view('Bulletins.index');
@@ -57,11 +57,23 @@ Route::resource('parents', ParentController::class)->parameters(['parents' => 'p
             return view('Notes.index');
         })->name('notes');
 
-        // Bulletins
-        Route::get('/bulletins', function () {
-            return view('Bulletins.index');
-        })->name('bulletins');
+        use App\Http\Controllers\BulletinController; Route::get('/bulletins', [BulletinController::class, 'index'])->name('bulletins.index'); Route::get('/bulletins/{eleve}', [BulletinController::class, 'show'])->name('bulletins.show'); Route::get('/bulletins/{eleve}/pdf', [BulletinController::class, 'exportPdf'])->name
+        // Utilisateurs routes
+        Route::resource('utilisateurs', UserAccessController::class)->parameters(['utilisateurs' => 'utilisateur']);
 
-        Route::get('/utilisateurs', function () {
-            return view('Utilisateurs.index');
-        })->name('utilisateurs');
+        // Role-specific dashboards
+        Route::get('/dashboard/admin', function () {
+            return view('Dashboard.admin.index');
+        })->name('dashboard.admin');
+        
+        Route::get('/dashboard/enseignant', function () {
+            return view('Dashboard.enseignant.index');
+        })->name('dashboard.enseignant');
+        
+        Route::get('/dashboard/parent', function () {
+            return view('Dashboard.parent.index');
+        })->name('dashboard.parent');
+        
+        Route::get('/dashboard/eleve', function () {
+            return view('Dashboard.eleve.index');
+        })->name('dashboard.eleve');

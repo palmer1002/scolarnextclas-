@@ -59,15 +59,12 @@ class UserAccessController extends Controller
         ]);
         
         try {
-            $user = User::create([
+            User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'role' => $validated['role'],
             ]);
-            
-            // Send email verification notification
-            $user->sendEmailVerificationNotification();
             
             return redirect()->route('utilisateurs.index')
                 ->with('success', 'Utilisateur créé avec succès !');

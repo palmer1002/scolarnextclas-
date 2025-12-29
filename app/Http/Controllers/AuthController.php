@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
 
 class AuthController extends Controller
 {
@@ -28,20 +27,15 @@ class AuthController extends Controller
             // Redirect based on user role
             $user = Auth::user();
             
-            // Check if email verification is required and if user has verified their email
-            if (!$user->hasVerifiedEmail()) {
-                return redirect()->route('verification.notice');
-            }
-            
             switch ($user->role) {
                 case 'admin':
-                    return redirect()->intended(route('dashboard'));
+                    return redirect()->intended('/dashboard/admin');
                 case 'enseignant':
-                    return redirect()->intended(route('enseignants.index'));
+                    return redirect()->intended('/dashboard/enseignant');
                 case 'parent':
-                    return redirect()->intended(route('parents.index'));
+                    return redirect()->intended('/dashboard/parent');
                 case 'eleve':
-                    return redirect()->intended(route('eleves.index'));
+                    return redirect()->intended('/dashboard/eleve');
                 default:
                     return redirect()->route('dashboard');
             }
@@ -59,52 +53,5 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
-    }
-    
-    // Afficher la notice de vérification d'email
-    public function showVerificationNotice()
-    {
-        if (Auth::user()->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard'));
-        }
-        
-        return view('auth.verify');
-    }
-    
-    // Vérifier l'email
-    public function verify(Request $request)
-    {
-        $request->validate([
-            'id' => 'required',
-            'hash' => 'required'
-        ]);
-        
-        $user = Auth::user();
-        
-        if ($user->id != $request->id || !URL::hasValidSignature($request)) {
-            return redirect('/login')->with('error', 'Le lien de vérification est invalide.');
-        }
-        
-        if ($user->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard'))->with('status', 'Votre email est déjà vérifié.');
-        }
-        
-        $user->markEmailAsVerified();
-        
-        return redirect()->intended(route('dashboard'))->with('status', 'Votre email a été vérifié avec succès!');
-    }
-    
-    // Renvoyer l'email de vérification
-    public function resend(Request $request)
-    {
-        $user = Auth::user();
-        
-        if ($user->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard'));
-        }
-        
-        $user->sendEmailVerificationNotification();
-        
-        return back()->with('status', 'Le lien de vérification a été envoyé!');
     }
 }

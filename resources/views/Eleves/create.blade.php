@@ -156,10 +156,42 @@
 </div>
 @endsection
 
-@section('styles')
+@endsection
+
+@push('styles')
 <style>
-    /* Styles spécifiques au formulaire */
+    /* Styles spécifiques au formulaire d'ajout d'élève */
+    .card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    .card-header {
+        background: #170B9DFF;
+        color: white;
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    .card-title {
+        margin: 0;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .card-header a {
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+        margin-top: 10px;
+        display: inline-block;
+    }
+    .card-header a:hover {
+        color: white;
+        text-decoration: underline;
+    }
     .form-container {
+        padding: 30px;
         max-width: 1000px;
         margin: 0 auto;
     }
@@ -178,22 +210,28 @@
     label {
         display: block;
         margin-bottom: 8px;
-        font-weight: 500;
+        font-weight: 600;
         color: #333;
+        font-size: 0.95rem;
     }
     input, select, textarea {
         width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
+        padding: 12px 15px;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
         font-size: 1rem;
         font-family: inherit;
-        transition: border 0.3s;
+        transition: all 0.3s;
+        background-color: #fff;
     }
     input:focus, select:focus, textarea:focus {
-        border-color: #170B9D;
+        border-color: #170B9DFF;
         outline: none;
-        box-shadow: 0 0 0 2px rgba(23, 11, 157, 0.1);
+        box-shadow: 0 0 0 3px rgba(23, 11, 157, 0.2);
+    }
+    input:disabled, select:disabled {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
     }
     textarea {
         min-height: 120px;
@@ -206,11 +244,66 @@
         color: #dc3545;
         font-size: 0.875rem;
         margin-top: 5px;
+        display: block;
+    }
+    .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+    .btn-primary {
+        background: #170B9DFF;
+        color: white;
+        border: none;
+    }
+    .btn-primary:hover {
+        background: #0f076d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(23, 11, 157, 0.3);
+    }
+    .btn-outline {
+        background: transparent;
+        color: #170B9DFF;
+        border: 2px solid #170B9DFF;
+    }
+    .btn-outline:hover {
+        background: #170B9DFF;
+        color: white;
+    }
+    .required:after {
+        content: " *";
+        color: #dc3545;
+    }
+    .form-section {
+        padding: 20px 0;
+        margin: 20px 0;
+        border-bottom: 1px solid #eee;
+    }
+    .form-section-title {
+        font-size: 1.2rem;
+        color: #170B9DFF;
+        margin: 20px 0 15px 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
     }
     @media (max-width: 768px) {
+        .form-container {
+            padding: 20px;
+        }
         .form-grid {
             grid-template-columns: 1fr;
         }
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
     }
 </style>
-@endsection
+@endpush

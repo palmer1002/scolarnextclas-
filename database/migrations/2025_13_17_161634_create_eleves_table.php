@@ -1,44 +1,50 @@
 <?php
-use Illuminate\Database\Schema\Blueprint;
+
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-Schema::create('eleves', function (Blueprint $table) {
-    $table->id();
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::create('eleves', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
 
-    $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('matricule', 100)->unique();
+            $table->string('nom', 100);
+            $table->string('prenom', 100);
 
-    $table->string('matricule', 100)->unique();
+            $table->date('date_naissance')->nullable();
+            $table->string('email', 150)->unique()->nullable();
+            $table->text('adresse')->nullable();
 
-    $table->string('nom', 100);
-    $table->string('prenom', 100);
+            // Relation avec Classe
+            $table->foreignId('classe_id')->constrained('classes')->cascadeOnDelete();
 
-    $table->date('date_naissance');
+            $table->enum('genre', ['Masculin', 'Féminin']);
+            $table->date('date_inscription');
+            $table->date('date_modification')->nullable();
 
-    $table->string('email', 150)->unique()->nullable();
+            $table->string('parent_nom', 150)->nullable();
+            $table->string('parent_relation', 100)->nullable();
+            $table->string('parent_telephone', 100)->nullable();
 
-    $table->text('adresse')->nullable();
+            $table->string('statut', 50)->default('actif');
 
-    $table->string('classe', 100);
+            $table->timestamps();
 
-    $table->enum('genre', ['Masculin', 'Féminin']);
+            $table->foreign('user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->nullOnDelete();
 
-    $table->date('date_inscription');
-    $table->date('date_modification')->nullable();
+            $table->index(['nom', 'prenom']);
+        });
+    }
 
-    $table->string('nom_parent', 150)->nullable();
-    $table->string('contact_parent', 100)->nullable();
-
-    $table->timestamps();
-
-    // Clé étrangère
-    $table->foreign('user_id')
-        ->references('id')
-        ->on('users')
-        ->onDelete('set null');
-
-    // Index
-    $table->index(['nom', 'prenom']);
-    $table->index('classe');
-});
-
-?>
+    public function down(): void
+    {
+        Schema::dropIfExists('eleves');
+    }
+};

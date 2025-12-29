@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #170B9D 0%, #7d6ae8 100%);
+            background: linear-gradient(135deg, #2313d4 0%, #7d6ae8 100%);
             height: 100vh;
             display: flex;
             align-items: center;
@@ -78,12 +78,27 @@
         .back-to-login a:hover {
             text-decoration: underline;
         }
+
+        .password-reset-container {
+    width: 350px;
+    margin: 80px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center; /* centre tout le contenu */
+}
+
+.logo img {
+    width: 90px;   /* taille du logo */
+    height: 90px;
+    margin-bottom: 15px; /* espace entre logo et titre */
+}
+
     </style>
 </head>
 <body>
-    <div class="password-reset-container">
-        <div class="logo">
-            <span><i class="fas fa-key"></i></span>
+    <div class="password-reset-container"> <div class="logo"> <img src="{{ asset('images/logo.png') }}" alt="Logo ScolarNextClas"> </div>
             <h2>ScolarNextClas</h2>
             <p class="text-muted">Réinitialisation du mot de passe</p>
         </div>

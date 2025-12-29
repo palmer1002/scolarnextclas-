@@ -8,47 +8,49 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #170B9D 0%, #7d6ae8 100%);
+            background: #f4f4f4;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .login-container {
-            background: white;
+            background: #fff;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             padding: 40px;
             width: 100%;
             max-width: 450px;
-        }
-        .logo {
+            margin: 40px auto;
             text-align: center;
-            margin-bottom: 30px;
         }
-        .logo span {
-            background: #ff6b6b;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
+
+        .logo img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #170B9D;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
+
         .form-control {
             padding: 12px 15px;
             border-radius: 8px;
             border: 1px solid #ddd;
             margin-bottom: 20px;
         }
+
         .form-control:focus {
             border-color: #170B9D;
             box-shadow: 0 0 0 0.2rem rgba(23, 11, 157, 0.25);
         }
+
         .btn-login {
             background: #170B9D;
             color: white;
@@ -60,47 +62,43 @@
             font-weight: 600;
             transition: all 0.3s;
         }
+
         .btn-login:hover {
             background: #120890;
             transform: translateY(-2px);
         }
+
         .alert {
             border-radius: 8px;
+            text-align: left;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="logo">
-            <span>$</span>
-            <h2>ScolarNextClas</h2>
-            <p class="text-muted">Plateforme de Gestion Scolaire</p>
+            <!-- Remplacez le chemin par le vrai chemin de votre logo -->
+            <img src="/images/logo.png" alt="Logo ScolarNextClas">
         </div>
+        <h2>ScolarNextClas</h2>
+        <p class="text-muted">Plateforme de Gestion Scolaire</p>
 
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
+        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
 
-        @if($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-            <div class="mb-3">
+        <form method="POST" action="/login" id="login-form">
+            <div class="mb-3 text-start">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" 
-                       value="{{ old('email') }}" required autofocus>
+                <input type="email" class="form-control" id="email" name="email" required autofocus>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 text-start">
                 <label for="password" class="form-label">Mot de passe</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
@@ -110,7 +108,7 @@
         </form>
         
         <div class="text-center mt-3">
-            <a href="{{ route('password.request') }}" class="text-muted">
+            <a href="/forgot-password" class="text-muted">
                 <small>Mot de passe oublié ?</small>
             </a>
         </div>
@@ -119,5 +117,34 @@
             <p class="text-muted">Année scolaire 2025-2026</p>
         </div>
     </div>
+
+    <script>
+        // Gestion basique du formulaire
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-message');
+            
+            // Réinitialiser les erreurs
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+            
+            // Validation basique
+            if (!email || !password) {
+                errorDiv.textContent = 'Veuillez remplir tous les champs.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Ici, vous ajouteriez l'appel AJAX à votre backend
+            // Pour l'instant, on simule juste l'envoi
+            console.log('Tentative de connexion:', { email, password });
+            
+            // Envoyer le formulaire normalement (sans AJAX)
+            this.submit();
+        });
+    </script>
 </body>
 </html>

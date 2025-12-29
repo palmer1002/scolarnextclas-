@@ -13,21 +13,35 @@ class Eleve extends Model
         'matricule',
         'nom',
         'prenom',
-        'classe',
         'genre',
+        'classe_id',
+        'date_naissance',
+        'adresse',
+        'email',
+        'parent_nom',
+        'parent_relation',
+        'parent_telephone',
         'date_inscription',
-        'contact_parent'
+        'statut',
     ];
 
     protected $casts = [
         'date_inscription' => 'date',
+        'date_naissance' => 'date',
     ];
 
+    //  Relations
     public function notes()
     {
         return $this->hasMany(Note::class);
     }
 
+    public function classe()
+    {
+        return $this->belongsTo(Classe::class);
+    }
+
+    //  Accessor
     public function getNomCompletAttribute()
     {
         return $this->nom . ' ' . $this->prenom;

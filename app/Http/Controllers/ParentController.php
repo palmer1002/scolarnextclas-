@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ParentModel; // Ton modèle Parent
+use App\Models\User; // Using User model with role
 use Illuminate\Http\Request;
 
 class ParentController extends Controller
@@ -12,7 +12,7 @@ class ParentController extends Controller
      */
     public function index()
     {
-        $parents = ParentModel::with('students')->paginate(10);
+        $parents = User::where('role', 'parent')->paginate(10);
         return view('parents.index', compact('parents'));
     }
 
@@ -36,7 +36,7 @@ class ParentController extends Controller
             'relation'    => 'required|string|max:50',
         ]);
 
-        ParentModel::create($request->all());
+        User::create(['name' => $request->nom_complet, 'email' => $request->email, 'password' => bcrypt('parent123'), 'role' => 'parent']);
 
         return redirect()->route('parents.index')
             ->with('success', 'Parent ajouté avec succès.');
@@ -47,7 +47,7 @@ class ParentController extends Controller
      */
     public function show($id)
     {
-        $parent = ParentModel::with('students')->findOrFail($id);
+        $parent = User::where('role', 'parent')->findOrFail($id);
         return view('parents.show', compact('parent'));
     }
 
@@ -56,7 +56,7 @@ class ParentController extends Controller
      */
     public function edit($id)
     {
-        $parent = ParentModel::findOrFail($id);
+        $parent = User::where('role', 'parent')->findOrFail($id);
         return view('parents.edit', compact('parent'));
     }
 
@@ -72,8 +72,8 @@ class ParentController extends Controller
             'relation'    => 'required|string|max:50',
         ]);
 
-        $parent = ParentModel::findOrFail($id);
-        $parent->update($request->all());
+        $parent = User::where('role', 'parent')->findOrFail($id);
+        $parent->update(['name' => $request->nom_complet, 'email' => $request->email]);
 
         return redirect()->route('parents.index')
             ->with('success', 'Parent mis à jour avec succès.');
@@ -84,7 +84,7 @@ class ParentController extends Controller
      */
     public function destroy($id)
     {
-        $parent = ParentModel::findOrFail($id);
+        $parent = User::where('role', 'parent')->findOrFail($id);
         $parent->delete();
 
         return redirect()->route('parents.index')
