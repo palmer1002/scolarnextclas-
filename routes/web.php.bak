@@ -1,12 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PaiementController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EleveController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserAccessController;
+use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EnseignantController;
+use App\Http\Controllers\UserAccessController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -191,15 +189,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::get('/', function () {
                 return view('Parents.index');
             })->name('index');
-            
+
             Route::get('/create', function () {
                 return view('Parents.create');
             })->name('create');
-            
+
             Route::get('/{id}', function ($id) {
                 return view('Parents.show', ['id' => $id]);
             })->name('show');
-            
+
             Route::get('/{id}/edit', function ($id) {
                 return view('Parents.edit', ['id' => $id]);
             })->name('edit');
@@ -212,7 +210,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::get('/', function () {
                 return view('Eleves.index');
             })->name('index');
-            
+
             Route::get('/create', [EleveController::class, 'create'])->name('create');
             Route::post('/', [EleveController::class, 'store'])->name('store');
             Route::get('/{id}', [EleveController::class, 'show'])->name('show');

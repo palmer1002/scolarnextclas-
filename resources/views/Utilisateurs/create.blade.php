@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mt-4">
     <!-- Bouton retour -->
-    <a href="{{ route('utilisateurs') }}" class="back-btn mb-3 d-inline-block">
+    <a href="{{ route('utilisateurs.index') }}" class="back-btn mb-3 d-inline-block">
         <i class="fas fa-arrow-left"></i> Retour à la liste
     </a>
 
@@ -87,7 +87,7 @@
                                     <label class="form-label required">Sélectionnez un rôle</label>
                                     <div class="row" id="roleSelection">
                                         <div class="col-md-4">
-                                            <div class="role-option" data-role="administrateur">
+                                            <div class="role-option" data-role="admin">
                                                 <div class="text-center">
                                                     <i class="fas fa-user-shield fa-2x text-primary mb-2"></i>
                                                     <h6>Administrateur</h6>
@@ -96,7 +96,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="role-option" data-role="directeur">
+                                            <div class="role-option" data-role="admin">
                                                 <div class="text-center">
                                                     <i class="fas fa-user-graduate fa-2x text-success mb-2"></i>
                                                     <h6>Directeur</h6>
@@ -105,7 +105,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="role-option" data-role="secretaire">
+                                            <div class="role-option" data-role="admin">
                                                 <div class="text-center">
                                                     <i class="fas fa-user-tie fa-2x text-info mb-2"></i>
                                                     <h6>Secrétaire</h6>
@@ -114,7 +114,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="role-option" data-role="comptable">
+                                            <div class="role-option" data-role="admin">
                                                 <div class="text-center">
                                                     <i class="fas fa-calculator fa-2x text-warning mb-2"></i>
                                                     <h6>Comptable</h6>
@@ -227,7 +227,7 @@
 
                         <!-- Boutons d'action -->
                         <div class="d-flex justify-content-between">
-                            <a href="{{ route('utilisateurs') }}" class="btn btn-secondary">
+                            <a href="{{ route('utilisateurs.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-times"></i> Annuler
                             </a>
                             <button type="submit" class="btn btn-primary">

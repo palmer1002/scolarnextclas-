@@ -16,7 +16,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Gestion des élèves</h5>
                             <p class="card-text">Ajouter, modifier et suivre les élèves</p>
-                            <a href="{{ route('eleves.index') }}" class="btn btn-light">Gérer les élèves</a>
+                            <a href="{{ route('dashboard.eleve') }}" class="btn btn-light">Gérer les élèves</a>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Gestion du personnel</h5>
                             <p class="card-text">Gérer les enseignants et leur affectation</p>
-                            <a href="{{ route('enseignants.index') }}" class="btn btn-light">Gérer enseignants</a>
+                            <a href="{{ route('dashboard.enseignant') }}" class="btn btn-light">Gérer enseignants</a>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Suivi des paiements</h5>
                             <p class="card-text">Surveiller les paiements scolaires</p>
-                            <a href="{{ route('paiements.index') ?? '#' }}" class="btn btn-light">Voir paiements</a>
+                            <a href="{{ route('bulletins.create') }}" class="btn btn-light">Créer bulletin</a>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Gestion des accès</h5>
                             <p class="card-text">Créer et gérer les utilisateurs</p>
-                            <a href="{{ route('utilisateurs.index') ?? '#' }}" class="btn btn-light">Gérer utilisateurs</a>
+                            <a href="" class="btn btn-light">Gérer utilisateurs</a>
                         </div>
                     </div>
                 </div>
@@ -121,28 +121,28 @@
                                         <h6 class="mb-1">Nouvel élève inscrit</h6>
                                         <small>Il y a 5 min</small>
                                     </div>
-                                    <p class="mb-1">Jean Dupont - 6ème A</p>
+                                    <p class="mb-1">Klanlenou Arnaud - 6ème A</p>
                                 </div>
                                 <div class="list-group-item">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h6 class="mb-1">Paiement reçu</h6>
                                         <small>Il y a 1h</small>
                                     </div>
-                                    <p class="mb-1">Frais scolaires - 120,000 FCFA</p>
+                                    <p class="mb-1">Kokoroko RayFrais scolaires - 120,000 FCFA</p>
                                 </div>
                                 <div class="list-group-item">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h6 class="mb-1">Nouvel enseignant</h6>
                                         <small>Il y a 2h</small>
                                     </div>
-                                    <p class="mb-1">M. Martin - Mathématiques</p>
+                                    <p class="mb-1">Raoul Blanc - Mathématiques</p>
                                 </div>
                                 <div class="list-group-item">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h6 class="mb-1">Notes mises à jour</h6>
                                         <small>Il y a 3h</small>
                                     </div>
-                                    <p class="mb-1">5ème A - Français</p>
+                                    <p class="mb-1">Aliou Sourou 5ème - Français</p>
                                 </div>
                             </div>
                         </div>

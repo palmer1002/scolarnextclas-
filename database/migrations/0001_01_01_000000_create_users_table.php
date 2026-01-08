@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // 🔹 Ajout de la colonne role
+            $table->string('role')->default('eleve'); 
+            // valeurs possibles : admin, enseignant, parent, eleve
+
             $table->rememberToken();
             $table->timestamps();
         });

@@ -11,9 +11,9 @@ class Note extends Model
 
     protected $fillable = [
         'eleve_id',
+        'matiere_id',
         'trimestre',
         'semestre',
-        'matiere',
         'note',
         'coefficient',
         'annee_scolaire',
@@ -30,5 +30,11 @@ class Note extends Model
     public function eleve()
     {
         return $this->belongsTo(Eleve::class);
+    }
+
+    // Relation avec Matiere
+    public function matiere()
+    {
+        return $this->belongsTo(Matiere::class);
     }
 }

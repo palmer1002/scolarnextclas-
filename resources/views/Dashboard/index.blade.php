@@ -319,7 +319,7 @@
         <div class="student-info">
             <strong>Amina Diallo</strong> - SNC2024001
             <span class="small-class">
-                Classe: 4e A | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
+                Classe: 4e  | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
             </span>
         </div>
         <div class="student-meta">
@@ -331,7 +331,7 @@
         <div class="student-info">
             <strong>Ray Kokoroko</strong> - SNC2024002
             <span class="small-class">
-                Classe: Tle D | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
+                Classe: Tle  | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
             </span>
         </div>
         <div class="student-meta">
@@ -343,7 +343,7 @@
         <div class="student-info">
             <strong>Arnaud Klanlenou</strong> - SNC2024003
             <span class="small-class">
-                Classe: 3e C | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
+                Classe: 3e | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
             </span>
         </div>
         <div class="student-meta">
@@ -355,7 +355,7 @@
         <div class="student-info">
             <strong>Amina Kokodoro</strong> - SNC2025001
             <span class="small-class">
-                Classe: 2nde S | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
+                Classe: 2nde | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
             </span>
         </div>
         <div class="student-meta">
@@ -367,7 +367,7 @@
         <div class="student-info">
             <strong>Brice Klanlenou</strong> - SNC2025002
             <span class="small-class">
-                Classe: 1ère A4 | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
+                Classe: 1ère | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
             </span>
         </div>
         <div class="student-meta">
@@ -379,7 +379,7 @@
         <div class="student-info">
             <strong>Gifty Mensah</strong> - SNC2025003
             <span class="small-class">
-                Classe: 6e D | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
+                Classe: 6e | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
             </span>
         </div>
         <div class="student-meta">
@@ -391,7 +391,7 @@
         <div class="student-info">
             <strong>Samuel Yovo</strong> - SNC2025004
             <span class="small-class">
-                Classe: 5e E | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
+                Classe: 5e | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
             </span>
         </div>
         <div class="student-meta">
@@ -403,7 +403,7 @@
         <div class="student-info">
             <strong>Mariam Tchalla</strong> - SNC2025005
             <span class="small-class">
-                Classe: Tle A4 | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
+                Classe: Tle | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
             </span>
         </div>
         <div class="student-meta">

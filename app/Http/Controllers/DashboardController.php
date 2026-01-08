@@ -184,4 +184,8 @@ class DashboardController extends Controller
             'message' => 'Note ajoutée avec succès'
         ], 201);
     }
+
+    public function dashboardeleve(){
+        return view('Dashboard.eleve.index');
+    }
 }

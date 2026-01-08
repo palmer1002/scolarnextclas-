@@ -38,7 +38,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Bulletins scolaires</h5>
                             <p class="card-text">Téléchargez les bulletins de vos enfants</p>
-                            <a href="{{ route('bulletins') }}" class="btn btn-light">Voir bulletins</a>
+                            <a href="" class="btn btn-light">Voir bulletins</a>
                         </div>
                     </div>
                 </div>
@@ -75,14 +75,14 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Marie Dupont</td>
+                                            <td>Marie Klanlenou</td>
                                             <td>6ème A</td>
                                             <td>16/20</td>
                                             <td>95%</td>
                                             <td><a href="#" class="btn btn-sm btn-outline-primary">Détails</a></td>
                                         </tr>
                                         <tr>
-                                            <td>Jean Dupont</td>
+                                            <td>Jean Klanlenou</td>
                                             <td>4ème B</td>
                                             <td>14/20</td>
                                             <td>92%</td>

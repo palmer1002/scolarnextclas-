@@ -133,6 +133,30 @@ class UserAccessController extends Controller
                 ->with('error', 'Erreur lors de la mise à jour : ' . $e->getMessage());
         }
     }
+
+    /**
+     * Activate a user account
+     */
+    public function activate($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = 'active';
+        $user->save();
+
+        return redirect()->route('utilisateurs.show', $id)->with('success', 'Utilisateur activé.');
+    }
+
+    /**
+     * Deactivate a user account
+     */
+    public function deactivate($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = 'inactive';
+        $user->save();
+
+        return redirect()->route('utilisateurs.show', $id)->with('success', 'Utilisateur désactivé.');
+    }
     
     /**
      * Remove the specified user from storage.

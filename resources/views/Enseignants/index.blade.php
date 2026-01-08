@@ -415,14 +415,18 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .sidebar h4{
+            font-size: 25px;
+        }
     </style>
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <span>$</span>
-            <h3>ScolarNextClas</h3>
+            <span><img src="{{ asset('images/logo.png') }}" alt="Logo ScolarNextClas" style="width:80px; height:80px;"></span>
+            <h4>ScolarNextClas</h4>
         </div>
         <ul>
             <li>
@@ -446,7 +450,7 @@
                 </a>
             </li>
             <li class="active">
-                <a href="enseignants.html" style="color: white; text-decoration: none; display: flex; align-items: center;">
+                <a href="{{ route('enseignants.index') }}" style="color: white; text-decoration: none; display: flex; align-items: center;">
                     <i class="fas fa-chalkboard-teacher" style="margin-right: 10px;"></i> Enseignants
                 </a>
             </li>
@@ -509,7 +513,7 @@
                 <section class="card">
                     <div class="card-header">
                         <h2 class="card-title"><i class="fas fa-list"></i> Liste des Enseignants</h2>
-                        <a href="#create" class="btn btn-primary">
+                        <a href="{{ route('enseignants.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Ajouter un enseignant
                         </a>
                     </div>
@@ -531,6 +535,24 @@
                         </select>
                     </div>
 
+                    {{-- Success / flash messages --}}
+                    @if(session('success'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @php
+                        $enseignants = $enseignants ?? collect();
+                        $showPagination = (method_exists($enseignants, 'links'));
+                    @endphp
+
                     <div class="table-container">
                         <table>
                             <thead>
@@ -544,271 +566,74 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($enseignants as $enseignant)
                                 <tr>
                                     <td>
-                                        <strong>Pr. Jean Kokoroko</strong>
+                                        <strong>{{ $enseignant->full_name }}</strong>
                                         <div style="font-size: 0.9rem; color: #666;">
-                                            <i class="fas fa-id-card me-1"></i> ENS001
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="subject-icon">
-                                            <i class="fas fa-calculator" style="color: #170B9DFF;"></i>
-                                            <strong>Mathématiques</strong>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; flex-direction: column; gap: 5px;">
-                                            <div style="color: #170B9DFF; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fas fa-envelope"></i>
-                                                j.kokoroko@school.com
-                                            </div>
-                                            <div style="color: #666; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fas fa-phone"></i>
-                                                +228 98 98 98 98
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                                            <span class="badge">6ème A</span>
-                                            <span class="badge">5ème B</span>
-                                            <span class="badge">Terminale C</span>
-                                            <span class="badge">1ère D</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="status-active">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <a href="#show" class="action-btn" title="Voir détails">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="#edit" class="action-btn" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="#delete" class="action-btn" title="Supprimer">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>Mme. Fatima Traoré</strong>
-                                        <div style="font-size: 0.9rem; color: #666;">
-                                            <i class="fas fa-id-card me-1"></i> ENS002
+                                            <i class="fas fa-id-card me-1"></i> ENS{{ str_pad($enseignant->id, 3, '0', STR_PAD_LEFT) }}
                                         </div>
                                     </td>
                                     <td>
                                         <span class="subject-icon">
                                             <i class="fas fa-book" style="color: #28a745;"></i>
-                                            <strong>Français</strong>
+                                            <strong>{{ $enseignant->subject ?? '-' }}</strong>
                                         </span>
                                     </td>
                                     <td>
                                         <div style="display: flex; flex-direction: column; gap: 5px;">
                                             <div style="color: #170B9DFF; display: flex; align-items: center; gap: 8px;">
                                                 <i class="fas fa-envelope"></i>
-                                                f.traore@school.com
+                                                {{ $enseignant->email ?? '-' }}
                                             </div>
                                             <div style="color: #666; display: flex; align-items: center; gap: 8px;">
                                                 <i class="fas fa-phone"></i>
-                                                +228 97 97 97 97
+                                                {{ $enseignant->phone ?? '-' }}
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                                            <span class="badge">6ème A</span>
-                                            <span class="badge">Terminale C</span>
-                                            <span class="badge">4ème B</span>
-                                            <span class="badge">3ème A</span>
+                                            <span class="badge">-</span>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="status-active">Actif</span>
+                                        <span class="status-active">{{ $enseignant->status }}</span>
                                     </td>
                                     <td>
                                         <div class="action-buttons">
-                                            <a href="#show" class="action-btn" title="Voir détails">
+                                            <a href="{{ route('enseignants.show', $enseignant->id) }}" class="action-btn" title="Voir détails">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="#edit" class="action-btn" title="Modifier">
+                                            <a href="{{ route('enseignants.edit', $enseignant->id) }}" class="action-btn" title="Modifier">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="#delete" class="action-btn" title="Supprimer">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
+                                            <form action="{{ route('enseignants.destroy', $enseignant->id) }}" method="POST" style="display:inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="action-btn" title="Supprimer" onclick="return confirm('Supprimer cet enseignant ?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
+                                @empty
                                 <tr>
-                                    <td>
-                                        <strong>M. Samuel Mensah</strong>
-                                        <div style="font-size: 0.9rem; color: #666;">
-                                            <i class="fas fa-id-card me-1"></i> ENS003
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="subject-icon">
-                                            <i class="fas fa-globe" style="color: #17a2b8;"></i>
-                                            <strong>Anglais</strong>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; flex-direction: column; gap: 5px;">
-                                            <div style="color: #170B9DFF; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fas fa-envelope"></i>
-                                                s.mensah@school.com
-                                            </div>
-                                            <div style="color: #666; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fas fa-phone"></i>
-                                                +228 99 99 99 99
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                                            <span class="badge">5ème B</span>
-                                            <span class="badge">4ème A</span>
-                                            <span class="badge">Terminale A4</span>
-                                            <span class="badge">1ère C</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="status-active">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <a href="#show" class="action-btn" title="Voir détails">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="#edit" class="action-btn" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="#delete" class="action-btn" title="Supprimer">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </td>
+                                    <td colspan="6" class="text-center">Aucun enseignant trouvé.</td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <strong>Dr. Marie Bossro</strong>
-                                        <div style="font-size: 0.9rem; color: #666;">
-                                            <i class="fas fa-id-card me-1"></i> ENS004
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="subject-icon">
-                                            <i class="fas fa-flask" style="color: #dc3545;"></i>
-                                            <strong>Sciences Physiques</strong>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; flex-direction: column; gap: 5px;">
-                                            <div style="color: #170B9DFF; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fas fa-envelope"></i>
-                                                m.bossro@school.com
-                                            </div>
-                                            <div style="color: #666; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fas fa-phone"></i>
-                                                +228 96 96 96 96
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                                            <span class="badge">Terminale C</span>
-                                            <span class="badge">1ère D</span>
-                                            <span class="badge">2nde S</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="status-active">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <a href="#show" class="action-btn" title="Voir détails">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="#edit" class="action-btn" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="#delete" class="action-btn" title="Supprimer">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>M. Ahmed Hassan</strong>
-                                        <div style="font-size: 0.9rem; color: #666;">
-                                            <i class="fas fa-id-card me-1"></i> ENS005
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="subject-icon">
-                                            <i class="fas fa-landmark" style="color: #6f42c1;"></i>
-                                            <strong>Histoire-Géographie</strong>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; flex-direction: column; gap: 5px;">
-                                            <div style="color: #170B9DFF; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fas fa-envelope"></i>
-                                                a.hassan@school.com
-                                            </div>
-                                            <div style="color: #666; display: flex; align-items: center; gap: 8px;">
-                                                <i class="fas fa-phone"></i>
-                                                +228 90 90 90 90
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                                            <span class="badge">4ème A</span>
-                                            <span class="badge">3ème C</span>
-                                            <span class="badge">Terminale A4</span>
-                                            <span class="badge">1ère D</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="status-active">Actif</span>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <a href="#show" class="action-btn" title="Voir détails">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="#edit" class="action-btn" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="#delete" class="action-btn" title="Supprimer">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @endforelse
                             </tbody>
+
                         </table>
                     </div>
 
                     <!-- Pagination -->
+                    @if($showPagination)
                     <div class="pagination">
-                        <li class="page-item active">
-                            <a href="#" class="page-link">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="#" class="page-link">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a href="#" class="page-link">Suivant</a>
-                        </li>
+                        {{ $enseignants->links() }}
                     </div>
+                    @endif
                 </section>
             </div>
         </div>

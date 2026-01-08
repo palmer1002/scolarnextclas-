@@ -20,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $router = $this->app['router'];
+        $router->aliasMiddleware('role', \App\Http\Middleware\CheckRole::class);
+
         Schema::defaultStringLength(191);
     }
 }

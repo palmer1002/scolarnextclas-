@@ -26,7 +26,7 @@
                         @method('DELETE')
 
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="{{ route('enseignants') }}" class="btn btn-secondary">
+                            <a href="{{ route('enseignants.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left me-1"></i> Annuler
                             </a>
                             <button type="submit" class="btn btn-danger">

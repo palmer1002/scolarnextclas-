@@ -84,16 +84,19 @@
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">
-            <!-- Remplacez le chemin par le vrai chemin de votre logo -->
-            <img src="/images/logo.png" alt="Logo ScolarNextClas">
+        <div class="logo d-flex align-items-center justify-content-center mb-3">
+            @include('partials.login-logo', ['class' => 'me-3'])
+            <div class="text-start">
+                <h2 style="margin:0;color:#170B9D;">ScolarNextClas</h2>
+              
+            </div>
         </div>
-        <h2>ScolarNextClas</h2>
         <p class="text-muted">Plateforme de Gestion Scolaire</p>
 
         <div id="error-message" class="alert alert-danger" style="display: none;"></div>
 
         <form method="POST" action="/login" id="login-form">
+            @csrf
             <div class="mb-3 text-start">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" name="email" required autofocus>
@@ -121,8 +124,6 @@
     <script>
         // Gestion basique du formulaire
         document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('error-message');
@@ -133,17 +134,13 @@
             
             // Validation basique
             if (!email || !password) {
+                e.preventDefault(); // Prevent submission only if validation fails
                 errorDiv.textContent = 'Veuillez remplir tous les champs.';
                 errorDiv.style.display = 'block';
                 return;
             }
             
-            // Ici, vous ajouteriez l'appel AJAX à votre backend
-            // Pour l'instant, on simule juste l'envoi
-            console.log('Tentative de connexion:', { email, password });
-            
-            // Envoyer le formulaire normalement (sans AJAX)
-            this.submit();
+            // Allow normal form submission if validation passes
         });
     </script>
 </body>

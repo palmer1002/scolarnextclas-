@@ -44,4 +44,45 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function hasRole($role)
+    {
+        // Si vous avez une relation roles
+        if ($this->roles) {
+            return $this->roles->contains('name', $role);
+        }
+
+        // Si vous avez un champ role dans la table users
+        return $this->role === $role;
+    }
+
+    // Convenience accessors for views -----------------------------------------------------------------
+    public function getStatusAttribute($value)
+    {
+        // Default to 'active' if not present in DB
+        return $value ?? 'active';
+    }
+
+    public function getPermissionsAttribute()
+    {
+        // If you later have a relation, return real permissions
+        return $this->attributes['permissions'] ?? [];
+    }
+
+    public function getActivitiesAttribute()
+    {
+        // Placeholder collection until activity model exists
+        return collect([]);
+    }
+
+    public function getRoleIconAttribute()
+    {
+        return match($this->role) {
+            'admin' => 'user-shield',
+            'enseignant' => 'chalkboard-teacher',
+            'parent' => 'user',
+            'eleve' => 'user-graduate',
+            default => 'user',
+        };
+    }
 }

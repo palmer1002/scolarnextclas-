@@ -38,7 +38,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Gestion des bulletins</h5>
                             <p class="card-text">Créez et imprimez les bulletins scolaires</p>
-                            <a href="{{ route('bulletins') }}" class="btn btn-light">Voir bulletins</a>
+                            <a href="" class="btn btn-light">Voir bulletins</a>
                         </div>
                     </div>
                 </div>

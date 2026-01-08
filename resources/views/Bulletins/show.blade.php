@@ -3,12 +3,14 @@
 @section('content')
 <div class="container">
     <h2 class="mb-4">Bulletin scolaire - {{ $eleve->nom }} {{ $eleve->prenom }}</h2>
-    <p><strong>Classe :</strong> {{ $eleve->classe->nom }} ({{ $eleve->classe->niveau }})</p>
+    <p><strong>Classe :</strong> {{ $eleve->classe->niveau ?? '—' }}</p>
     <p><strong>Année scolaire :</strong> {{ $bulletins->first()->annee_scolaire ?? 'N/A' }}</p>
 
     <hr>
 
     <h4>Détail par matière</h4>
+
+    <p><strong>Période :</strong> @if(isset($periodType) && $periodType === 'trimestre') Trimestre {{ $periodInt }} @elseif(isset($periodType) && $periodType === 'semestre') Semestre {{ $periodInt }} @else N/A @endif</p>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -30,40 +32,58 @@
         </tbody>
     </table>
 
-    <h4>Moyennes trimestrielles</h4>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Trimestre</th>
-                <th>Moyenne générale</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($bulletins->whereNotNull('trimestre') as $bulletin)
+    @if(isset($periodType) && $periodType === 'trimestre')
+        <h4>Moyennes trimestrielles</h4>
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>{{ $bulletin->trimestre }}</td>
-                    <td>{{ $bulletin->moyenne }}</td>
+                    <th>Trimestre</th>
+                    <th>Moyenne générale</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($bulletins as $bulletin)
+                    <tr>
+                        <td>{{ $bulletin->trimestre }}</td>
+                        <td>{{ $bulletin->moyenne }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
 
-    <h4>Moyennes semestrielles</h4>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Semestre</th>
-                <th>Moyenne générale</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($bulletins->whereNotNull('semestre') as $bulletin)
+        <!-- Bouton pour exporter en PDF -->
+        <div class="mt-4">
+            <a href="{{ route('bulletins.exportPdf', [$eleve->id, $periodInt]) }}" class="btn btn-success">
+                Télécharger en PDF
+            </a>
+        </div>
+    @elseif(isset($periodType) && $periodType === 'semestre')
+        <h4>Moyennes semestrielles</h4>
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>{{ $bulletin->semestre }}</td>
-                    <td>{{ $bulletin->moyenne }}</td>
+                    <th>Semestre</th>
+                    <th>Moyenne générale</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($bulletins as $bulletin)
+                    <tr>
+                        <td>{{ $bulletin->semestre }}</td>
+                        <td>{{ $bulletin->moyenne }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <!-- Bouton pour exporter en PDF -->
+        <div class="mt-4">
+            <a href="{{ route('bulletins.exportPdf', [$eleve->id, $periodInt]) }}" class="btn btn-success">
+                Télécharger en PDF
+            </a>
+        </div>
+    @else
+        <p>Aucune donnée de période disponible pour cet élève.</p>
+    @endif
 </div>
 @endsection

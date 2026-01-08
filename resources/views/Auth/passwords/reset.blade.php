@@ -97,7 +97,10 @@
     </style>
 </head>
 <body>
-    <div class="password-reset-container"> <div class="logo"> <img src="{{ asset('images/logo.png') }}" alt="Logo ScolarNextClas"> </div>
+    <div class="password-reset-container">
+            <div class="logo">
+                @include('partials.login-logo')
+            </div>
             <h2>ScolarNextClas</h2>
             <p class="text-muted">Réinitialisation du mot de passe</p>
         </div>

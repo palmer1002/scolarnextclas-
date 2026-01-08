@@ -56,7 +56,7 @@
                     <div>
                         <p style="margin: 0 0 10px 0;">
                             <strong>Classe:</strong><br>
-                            {{ $eleve->classe->nom ?? 'Non assigné' }}
+                            {{ $eleve->classe->niveau ?? 'Non assigné' }}
                         </p>
                         <p style="margin: 0;">
                             <strong>Date d'inscription:</strong><br>

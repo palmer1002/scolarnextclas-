@@ -29,13 +29,13 @@ class AuthController extends Controller
             
             switch ($user->role) {
                 case 'admin':
-                    return redirect()->intended('/dashboard/admin');
+                    return redirect()->route('dashboard.admin');
                 case 'enseignant':
-                    return redirect()->intended('/dashboard/enseignant');
+                    return redirect()->route('dashboard.enseignant');
                 case 'parent':
-                    return redirect()->intended('/dashboard/parent');
+                    return redirect()->route('dashboard.parent');
                 case 'eleve':
-                    return redirect()->intended('/dashboard/eleve');
+                    return redirect()->route('dashboard.eleve');
                 default:
                     return redirect()->route('dashboard');
             }

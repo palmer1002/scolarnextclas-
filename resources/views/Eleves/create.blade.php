@@ -17,7 +17,15 @@
                 @csrf
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="prenom">Prénom *</label>
+                        <label for="matricule" class="required">Matricule *</label>
+                        <input type="text" id="matricule" name="matricule" value="{{ old('matricule') }}" required 
+                               placeholder="ex: SNC2025001" class="@error('matricule') is-invalid @enderror">
+                        @error('matricule')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="prenom" class="required">Prénom *</label>
                         <input type="text" id="prenom" name="prenom" value="{{ old('prenom') }}" required 
                                placeholder="Prénom" class="@error('prenom') is-invalid @enderror">
                         @error('prenom')
@@ -25,7 +33,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="nom">Nom *</label>
+                        <label for="nom" class="required">Nom *</label>
                         <input type="text" id="nom" name="nom" value="{{ old('nom') }}" required 
                                placeholder="Nom de famille" class="@error('nom') is-invalid @enderror">
                         @error('nom')
@@ -33,9 +41,9 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="genre">Genre *</label>
+                        <label for="genre" class="required">Genre *</label>
                         <select id="genre" name="genre" required class="@error('genre') is-invalid @enderror">
-                            <option value="">Sélectionner</option>
+                            <option value="" disabled {{ old('genre') ? '' : 'selected' }}>Sélectionner</option>
                             <option value="Masculin" {{ old('genre') == 'Masculin' ? 'selected' : '' }}>Masculin</option>
                             <option value="Féminin" {{ old('genre') == 'Féminin' ? 'selected' : '' }}>Féminin</option>
                         </select>
@@ -44,10 +52,18 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="date_naissance">Date de naissance *</label>
+                        <label for="date_naissance" class="required">Date de naissance *</label>
                         <input type="date" id="date_naissance" name="date_naissance" 
                                value="{{ old('date_naissance') }}" required class="@error('date_naissance') is-invalid @enderror">
                         @error('date_naissance')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="date_inscription" class="required">Date d'inscription *</label>
+                        <input type="date" id="date_inscription" name="date_inscription" 
+                               value="{{ old('date_inscription', now()->format('Y-m-d')) }}" required class="@error('date_inscription') is-invalid @enderror">
+                        @error('date_inscription')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -56,8 +72,8 @@
                         <select id="classe_id" name="classe_id" required class="@error('classe_id') is-invalid @enderror">
                             <option value="">Sélectionner une classe</option>
                             @foreach($classes as $classe)
-                                <option value="{{ $classe->id }}" {{ old('classe_id') == $classe->id ? 'selected' : '' }}>
-                                    {{ $classe->nom }}
+                                <option value="{{ $classe }}" {{ old('classe_id') == $classe ? 'selected' : '' }}>
+                                    {{ $classe }}
                                 </option>
                             @endforeach
                         </select>
@@ -156,8 +172,6 @@
 </div>
 @endsection
 
-@endsection
-
 @push('styles')
 <style>
     /* Styles spécifiques au formulaire d'ajout d'élève */
@@ -224,6 +238,15 @@
         transition: all 0.3s;
         background-color: #fff;
     }
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M3.204 5.12a.5.5 0 0 1 .697-.06L8 8.293l4.099-3.233a.5.5 0 0 1 .64.768l-4.5 3.547a.5.5 0 0 1-.597 0L3.26 5.83a.5.5 0 0 1-.056-.71z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 40px;
+    }
     input:focus, select:focus, textarea:focus {
         border-color: #170B9DFF;
         outline: none;
@@ -232,6 +255,18 @@
     input:disabled, select:disabled {
         background-color: #f8f9fa;
         cursor: not-allowed;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg,#170B9D 0%,#0f076d 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 6px 18px rgba(23,11,157,0.15);
+        transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 26px rgba(23,11,157,0.18);
     }
     textarea {
         min-height: 120px;

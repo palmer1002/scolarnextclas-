@@ -2,29 +2,25 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Classe;
+use Illuminate\Database\Seeder;
 
 class ClasseSeeder extends Seeder
 {
     public function run(): void
     {
-        $classes = [
-            ['nom' => '6e A', 'niveau' => 'Collège', 'annee_scolaire' => '2025-2026'],
-            ['nom' => '5e B', 'niveau' => 'Collège', 'annee_scolaire' => '2025-2026'],
-            ['nom' => '4e A', 'niveau' => 'Collège', 'annee_scolaire' => '2025-2026'],
-            ['nom' => '3e C', 'niveau' => 'Collège', 'annee_scolaire' => '2025-2026'],
-            ['nom' => '2nde A', 'niveau' => 'Lycée', 'annee_scolaire' => '2025-2026'],
-            ['nom' => '1ère C', 'niveau' => 'Lycée', 'annee_scolaire' => '2025-2026'],
-            ['nom' => 'Tle D', 'niveau' => 'Lycée', 'annee_scolaire' => '2025-2026'],
+        // Créer une classe par niveau (6ème → Tle)
+        $niveaux = [
+            '6ème', '5ème', '4ème', '3ème',
+            '2nde', '1ère', 'Tle',
         ];
 
-        foreach ($classes as $classe) {
+        foreach ($niveaux as $niveau) {
             Classe::firstOrCreate(
-                ['nom' => $classe['nom']],
+                ['niveau' => $niveau],
                 [
-                    'niveau' => $classe['niveau'],
-                    'annee_scolaire' => $classe['annee_scolaire']
+                    'nom' => $niveau, // nom égal au niveau pour simplicité
+                    'annee_scolaire' => '2025-2026',
                 ]
             );
         }

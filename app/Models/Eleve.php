@@ -41,6 +41,13 @@ class Eleve extends Model
         return $this->belongsTo(Classe::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+
     //  Accessor
     public function getNomCompletAttribute()
     {

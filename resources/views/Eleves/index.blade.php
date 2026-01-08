@@ -32,8 +32,8 @@
                 <select name="classe" class="form-control">
                     <option value="">Toutes les classes</option>
                     @foreach($classes as $classe)
-                        <option value="{{ $classe->id }}" {{ request('classe') == $classe->id ? 'selected' : '' }}>
-                            {{ $classe->nom }}
+                        <option value="{{ $classe }}" {{ request('classe') == $classe ? 'selected' : '' }}>
+                            {{ $classe }}
                         </option>
                     @endforeach
                 </select>
@@ -61,7 +61,7 @@
                     <tr>
                         <td><strong>{{ $eleve->matricule }}</strong></td>
                         <td><strong>{{ $eleve->nom_complet }}</strong></td>
-                        <td>{{ $eleve->classe->nom ?? '-' }}</td>
+                        <td>{{ $eleve->classe->niveau ?? '-' }}</td>
                         <td>
                             <span class="gender-icon">
                                 <i class="fas {{ $eleve->genre == 'Féminin' ? 'fa-venus' : 'fa-mars' }}" 

@@ -68,7 +68,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <span>$</span>
+            @include('partials.login-logo', ['class' => 'me-2'])
             <h3>ScolarNextClas</h3>
         </div>
         <ul>

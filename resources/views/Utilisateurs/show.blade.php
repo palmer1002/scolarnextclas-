@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mt-4">
     <!-- Bouton retour -->
-    <a href="{{ route('utilisateurs') }}" class="back-btn mb-3 d-inline-block">
+    <a href="{{ route('utilisateurs.index') }}" class="back-btn mb-3 d-inline-block">
         <i class="fas fa-arrow-left"></i> Retour à la liste
     </a>
 
@@ -254,6 +254,7 @@
     </div>
 </div>
 
+@section('styles')
 <style>
 .info-card {
     border-left: 4px solid #170B9DFF;

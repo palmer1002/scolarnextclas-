@@ -5,24 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class eleve extends Model
+class ParentModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'eleve';
+    protected $table = 'parents';
 
     protected $fillable = [
         'nom_complet',
-        'matricule',
-        'classe',
-        'parent_id',
+        'telephone',
+        'email',
+        'adresse',
     ];
 
     /**
-     * Relation : un élève appartient à un parent.
+     * Relation : un parent peut avoir plusieurs élèves.
      */
-    public function parent()
+    public function eleves()
     {
-        return $this->belongsTo(ParentModel::class, 'parent_id', 'id');
+        return $this->hasMany(Eleve::class, 'parent_id', 'id');
     }
 }

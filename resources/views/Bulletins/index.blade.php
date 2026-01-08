@@ -15,11 +15,11 @@
         <tbody>
             @foreach($bulletins as $bulletin)
                 <tr>
-                    <td>{{ $bulletin->eleve->nom }} {{ $bulletin->eleve->prenom }}</td>
-                    <td>{{ $bulletin->eleve->classe->nom }}</td>
+                    <td>{{ optional($bulletin->eleve)->nom ?? '—' }} {{ optional($bulletin->eleve)->prenom ?? '' }}</td>
+                    <td>{{ optional(optional($bulletin->eleve)->classe)->nom ?? '—' }}</td>
                     <td>{{ $bulletin->annee_scolaire }}</td>
                     <td>
-                        <a href="{{ route('bulletins.show', $bulletin->eleve_id) }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('bulletins.show', [$bulletin->eleve_id, $bulletin->trimestre ?? $bulletin->semestre]) }}" class="btn btn-primary btn-sm">
                             Voir bulletin
                         </a>
                     </td>

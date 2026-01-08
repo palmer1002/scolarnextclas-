@@ -11,7 +11,7 @@
                     <h4 style="color:#170B9DFF;">
                         <i class="fas fa-user-plus me-2"></i> Ajouter un enseignant
                     </h4>
-                    <a href="{{ route('enseignants') }}" class="btn btn-sm btn-secondary">
+                    <a href="{{ route('enseignants.index') }}" class="btn btn-sm btn-secondary">
                         <i class="fas fa-arrow-left"></i> Retour
                     </a>
                 </div>

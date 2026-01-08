@@ -33,6 +33,7 @@ class Classe extends Model
 
     public function getNomCompletAttribute(): string
     {
-        return $this->nom . ' - ' . $this->niveau;
+        // Afficher uniquement le niveau
+        return (string) $this->niveau;
     }
 }

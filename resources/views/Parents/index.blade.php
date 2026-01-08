@@ -514,7 +514,7 @@
                             <tbody>
                                 <tr>
                                     <td><strong>Mohamed Diallo</strong></td>
-                                    <td>+221 77 123 4567</td>
+                                    <td>+228 90 90 90 90</td>
                                     <td>mohamed.diallo@email.com</td>
                                     <td>Père</td>
                                     <td>
@@ -539,7 +539,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Yaa Mensah</strong></td>
-                                    <td>+233 24 567 8901</td>
+                                    <td>+228 98 98 98 98</td>
                                     <td>yaa.mensah@email.com</td>
                                     <td>Mère</td>
                                     <td>
@@ -564,7 +564,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Ousmane Ndiaye</strong></td>
-                                    <td>+221 76 234 5678</td>
+                                    <td>+228 97 97 97 97</td>
                                     <td>ousmane.ndiaye@email.com</td>
                                     <td>Père</td>
                                     <td>
@@ -589,7 +589,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Aïssatou Sow</strong></td>
-                                    <td>+221 70 987 6543</td>
+                                    <td>+228 99 99 99 99</td>
                                     <td><span style="color: #999;">Non renseigné</span></td>
                                     <td>Mère</td>
                                     <td>

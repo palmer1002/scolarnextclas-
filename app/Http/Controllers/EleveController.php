@@ -1,6 +1,6 @@
 <?php
 
-nnamespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
 use App\Models\Classe;
 use App\Models\Eleve;
@@ -10,7 +10,7 @@ class EleveController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Eleve::query();
+        $query = Eleve::with('classe');
 
         if ($request->filled('search')) {
             $query->where(function($q) use ($request) {
@@ -24,7 +24,7 @@ class EleveController extends Controller
             $query->where('classe_id', $request->classe);
         }
 
-        $eleves = $query->paginate(10);
+        $eleves = $query->paginate(10)->withQueryString();
         $classes = Classe::all();
 
         return view('eleves.index', compact('eleves', 'classes'));
@@ -42,13 +42,13 @@ class EleveController extends Controller
             'matricule' => 'required|unique:eleves',
             'nom' => 'required|string|max:100',
             'prenom' => 'required|string|max:100',
-            'genre' => 'required|string',
+            'genre' => 'required|in:masculin,feminin',
             'classe_id' => 'nullable|exists:classes,id',
             'parent_nom' => 'nullable|string|max:255',
             'parent_relation' => 'nullable|string|max:255',
             'parent_telephone' => 'nullable|string|max:20',
             'date_inscription' => 'required|date',
-            'statut' => 'required|string',
+            'statut' => 'required|in:actif,inactif',
         ]);
 
         Eleve::create($validated);
@@ -58,6 +58,7 @@ class EleveController extends Controller
 
     public function show(Eleve $eleve)
     {
+        $eleve->load('classe');
         return view('eleves.show', compact('eleve'));
     }
 
@@ -73,13 +74,13 @@ class EleveController extends Controller
             'matricule' => 'required|unique:eleves,matricule,'.$eleve->id,
             'nom' => 'required|string|max:100',
             'prenom' => 'required|string|max:100',
-            'genre' => 'required|string',
+            'genre' => 'required|in:masculin,feminin',
             'classe_id' => 'nullable|exists:classes,id',
             'parent_nom' => 'nullable|string|max:255',
             'parent_relation' => 'nullable|string|max:255',
             'parent_telephone' => 'nullable|string|max:20',
             'date_inscription' => 'required|date',
-            'statut' => 'required|string',
+            'statut' => 'required|in:actif,inactif',
         ]);
 
         $eleve->update($validated);
