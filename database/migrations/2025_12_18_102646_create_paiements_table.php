@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (!Schema::hasTable('paiements')) {
         Schema::create('paiements', function (Blueprint $table) {
             $table->id();
 
@@ -121,6 +122,7 @@ return new class extends Migration
             $table->index(['is_recurrent']);
             $table->index(['created_at']);
         });
+        }
     }
 
     public function down(): void

@@ -45,8 +45,8 @@
                         <label for="genre" class="required">Genre *</label>
                         <select id="genre" name="genre" required class="@error('genre') is-invalid @enderror">
                             <option value="" disabled {{ old('genre', $eleve->genre) ? '' : 'selected' }}>Sélectionner</option>
-                            <option value="Masculin" {{ old('genre', $eleve->genre) == 'Masculin' ? 'selected' : '' }}>Masculin</option>
-                            <option value="Féminin" {{ old('genre', $eleve->genre) == 'Féminin' ? 'selected' : '' }}>Féminin</option>
+                            <option value="masculin" {{ old('genre', $eleve->genre) == 'masculin' ? 'selected' : '' }}>Masculin</option>
+                            <option value="feminin" {{ old('genre', $eleve->genre) == 'feminin' ? 'selected' : '' }}>Féminin</option>
                         </select>
                         @error('genre')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -73,8 +73,8 @@
                         <select id="classe_id" name="classe_id" required class="@error('classe_id') is-invalid @enderror">
                             <option value="">Sélectionner une classe</option>
                             @foreach($classes as $classe)
-                                <option value="{{ $classe }}" {{ old('classe_id', $eleve->classe->niveau ?? '') == $classe ? 'selected' : '' }}>
-                                    {{ $classe }}
+                                <option value="{{ $classe->id }}" {{ old('classe_id', $eleve->classe_id) == $classe->id ? 'selected' : '' }}>
+                                    {{ $classe->nom }}
                                 </option>
                             @endforeach
                         </select>

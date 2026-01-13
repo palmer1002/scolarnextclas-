@@ -42,6 +42,25 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('notes', function (Blueprint $table) {
+            $table->string('matiere')->after('eleve_id');
+
+            // Restaurer les données de matiere depuis matiere_id
+            $notes = DB::table('notes')->get();
+            foreach ($notes as $note) {
+                if ($note->matiere_id) {
+                    $matiere = DB::table('matieres')->where('id', $note->matiere_id)->first();
+                    if ($matiere) {
+                        DB::table('notes')
+                            ->where('id', $note->id)
+                            ->update(['matiere' => $matiere->nom]);
+                    }
+                }
+            }
+
+            // Supprimer la colonne matiere_id
+            $table->dropForeign(['matiere_id']);
+            $table->dropColumn('matiere_id');
+        });
     }
 };

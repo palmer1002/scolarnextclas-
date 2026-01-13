@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Note;
+use App\Models\Classe;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Eleve extends Model
 {
@@ -52,5 +56,10 @@ class Eleve extends Model
     public function getNomCompletAttribute()
     {
         return $this->nom . ' ' . $this->prenom;
+    }
+
+    public function getAgeAttribute()
+    {
+        return $this->date_naissance ? $this->date_naissance->age : null;
     }
 }

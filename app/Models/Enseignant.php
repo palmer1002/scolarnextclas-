@@ -10,6 +10,7 @@ class Enseignant extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'title',
         'first_name',
         'last_name',
@@ -18,6 +19,11 @@ class Enseignant extends Model
         'phone',
         'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     protected $casts = [
         'created_at' => 'datetime',

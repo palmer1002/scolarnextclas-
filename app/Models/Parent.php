@@ -12,17 +12,21 @@ class ParentModel extends Model
     protected $table = 'parents';
 
     protected $fillable = [
+        'user_id',
         'nom_complet',
         'telephone',
         'email',
         'adresse',
+        'profession',
     ];
 
-    /**
-     * Relation : un parent peut avoir plusieurs élèves.
-     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function eleves()
     {
-        return $this->hasMany(Eleve::class, 'parent_id', 'id');
+        return $this->hasMany(Eleve::class, 'parent_id'); // We need to ensure Eleve has parent_id or use user_id logic
     }
 }

@@ -29,7 +29,7 @@
                     @endif
 
                     {{-- Formulaire de modification --}}
-                    <form action="{{ route('enseignants.update', $teacher->id) }}" method="POST">
+                    <form action="{{ route('enseignants.update', $enseignant->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -38,9 +38,9 @@
                             <label class="form-label">Titre</label>
                             <select name="title" class="form-select" required>
                                 <option value="">-- Choisir --</option>
-                                <option value="M." {{ $teacher->title == 'M.' ? 'selected' : '' }}>M.</option>
-                                <option value="Mme" {{ $teacher->title == 'Mme' ? 'selected' : '' }}>Mme</option>
-                                <option value="Mlle" {{ $teacher->title == 'Mlle' ? 'selected' : '' }}>Mlle</option>
+                                <option value="M." {{ $enseignant->title == 'M.' ? 'selected' : '' }}>M.</option>
+                                <option value="Mme" {{ $enseignant->title == 'Mme' ? 'selected' : '' }}>Mme</option>
+                                <option value="Mlle" {{ $enseignant->title == 'Mlle' ? 'selected' : '' }}>Mlle</option>
                             </select>
                         </div>
 
@@ -48,45 +48,45 @@
                         <div class="mb-3">
                             <label class="form-label">Nom</label>
                             <input type="text" name="last_name" class="form-control"
-                                   value="{{ old('last_name', $teacher->last_name) }}" required>
+                                   value="{{ old('last_name', $enseignant->last_name) }}" required>
                         </div>
 
                         {{-- Prénom --}}
                         <div class="mb-3">
                             <label class="form-label">Prénom</label>
                             <input type="text" name="first_name" class="form-control"
-                                   value="{{ old('first_name', $teacher->first_name) }}" required>
+                                   value="{{ old('first_name', $enseignant->first_name) }}" required>
                         </div>
 
                         {{-- Matière --}}
                         <div class="mb-3">
                             <label class="form-label">Matière</label>
                             <input type="text" name="subject" class="form-control"
-                                   value="{{ old('subject', $teacher->subject) }}" required>
+                                   value="{{ old('subject', $enseignant->subject) }}" required>
                         </div>
 
                         {{-- Email --}}
                         <div class="mb-3">
                             <label class="form-label">Email</label>
                             <input type="email" name="email" class="form-control"
-                                   value="{{ old('email', $teacher->email) }}">
+                                   value="{{ old('email', $enseignant->email) }}">
                         </div>
 
                         {{-- Téléphone --}}
                         <div class="mb-3">
                             <label class="form-label">Téléphone</label>
                             <input type="text" name="phone" class="form-control"
-                                   value="{{ old('phone', $teacher->phone) }}">
+                                   value="{{ old('phone', $enseignant->phone) }}">
                         </div>
 
                         {{-- Statut --}}
                         <div class="mb-3">
                             <label class="form-label">Statut</label>
                             <select name="status" class="form-select">
-                                <option value="Permanent" {{ $teacher->status == 'Permanent' ? 'selected' : '' }}>
+                                <option value="Permanent" {{ $enseignant->status == 'Permanent' ? 'selected' : '' }}>
                                     Permanent
                                 </option>
-                                <option value="Vacataire" {{ $teacher->status == 'Vacataire' ? 'selected' : '' }}>
+                                <option value="Vacataire" {{ $enseignant->status == 'Vacataire' ? 'selected' : '' }}>
                                     Vacataire
                                 </option>
                             </select>
