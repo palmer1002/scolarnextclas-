@@ -83,16 +83,28 @@
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Trimestre</label>
-            <select name="trimestre" class="form-control @error('trimestre') is-invalid @enderror" required>
-                <option value="1" {{ old('trimestre') == 1 ? 'selected' : '' }}>1er trimestre</option>
-                <option value="2" {{ old('trimestre') == 2 ? 'selected' : '' }}>2ème trimestre</option>
-                <option value="3" {{ old('trimestre') == 3 ? 'selected' : '' }}>3ème trimestre</option>
-            </select>
-            @error('trimestre')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Type de Période</label>
+                <select name="type_periode" class="form-control @error('type_periode') is-invalid @enderror" required>
+                    <option value="Trimestre" {{ old('type_periode') == 'Trimestre' ? 'selected' : '' }}>Trimestre</option>
+                    <option value="Semestre" {{ old('type_periode') == 'Semestre' ? 'selected' : '' }}>Semestre</option>
+                </select>
+                @error('type_periode')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Numéro de Période</label>
+                <select name="numero_periode" class="form-control @error('numero_periode') is-invalid @enderror" required>
+                    <option value="1" {{ old('numero_periode') == 1 ? 'selected' : '' }}>Période 1</option>
+                    <option value="2" {{ old('numero_periode') == 2 ? 'selected' : '' }}>Période 2</option>
+                    <option value="3" {{ old('numero_periode') == 3 ? 'selected' : '' }}>Période 3</option>
+                </select>
+                @error('numero_periode')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
         </div>
 
         <div class="mb-3">

@@ -1,330 +1,117 @@
 @extends('layouts.app')
 
-@section('title', 'Créer un utilisateur')
+@section('title', 'Nouvel Utilisateur')
 
 @section('content')
-<div class="container mt-4">
-    <!-- Bouton retour -->
-    <a href="{{ route('utilisateurs.index') }}" class="back-btn mb-3 d-inline-block">
-        <i class="fas fa-arrow-left"></i> Retour à la liste
-    </a>
-
+<div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="card shadow">
-                <div class="card-header">
-                    <h4 class="mb-0">
-                        <i class="fas fa-user-plus"></i> Créer un Nouvel Utilisateur
-                    </h4>
+        <div class="col-md-9 col-lg-7">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="text-primary mb-0"><i class="fas fa-user-plus me-2"></i> Nouveau Staff</h2>
+                    <p class="text-muted mb-0">Création d'un nouveau compte administratif</p>
                 </div>
-                
-                <form action="{{ route('utilisateurs.store') }}" method="POST" id="createUserForm">
-                    @csrf
-                    
-                    <div class="card-body">
-                        <!-- Informations personnelles -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0"><i class="fas fa-id-card"></i> Informations Personnelles</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="name" class="form-label required">Nom complet</label>
-                                        <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                                               id="name" name="name" value="{{ old('name') }}" required>
-                                        @error('name')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <label for="email" class="form-label required">Adresse email</label>
-                                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                               id="email" name="email" value="{{ old('email') }}" required>
-                                        @error('email')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="phone" class="form-label">Téléphone</label>
-                                        <input type="tel" class="form-control @error('phone') is-invalid @enderror" 
-                                               id="phone" name="phone" value="{{ old('phone') }}">
-                                        @error('phone')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <label for="department" class="form-label">Département/Service</label>
-                                        <select class="form-select @error('department') is-invalid @enderror" 
-                                                id="department" name="department">
-                                            <option value="">Sélectionner un département</option>
-                                            <option value="administration" {{ old('department') == 'administration' ? 'selected' : '' }}>Administration</option>
-                                            <option value="enseignement" {{ old('department') == 'enseignement' ? 'selected' : '' }}>Enseignement</option>
-                                            <option value="comptabilite" {{ old('department') == 'comptabilite' ? 'selected' : '' }}>Comptabilité</option>
-                                            <option value="direction" {{ old('department') == 'direction' ? 'selected' : '' }}>Direction</option>
-                                            <option value="autre" {{ old('department') == 'autre' ? 'selected' : '' }}>Autre</option>
-                                        </select>
-                                        @error('department')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <a href="{{ route('utilisateurs.index') }}" class="btn btn-outline-secondary px-4 fw-bold">
+                    <i class="fas fa-arrow-left me-1"></i> Retour
+                </a>
+            </div>
 
-                        <!-- Rôle et accès -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0"><i class="fas fa-user-tag"></i> Rôle et Accès</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label class="form-label required">Sélectionnez un rôle</label>
-                                    <div class="row" id="roleSelection">
-                                        <div class="col-md-4">
-                                            <div class="role-option" data-role="admin">
-                                                <div class="text-center">
-                                                    <i class="fas fa-user-shield fa-2x text-primary mb-2"></i>
-                                                    <h6>Administrateur</h6>
-                                                    <small class="text-muted">Accès complet au système</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="role-option" data-role="admin">
-                                                <div class="text-center">
-                                                    <i class="fas fa-user-graduate fa-2x text-success mb-2"></i>
-                                                    <h6>Directeur</h6>
-                                                    <small class="text-muted">Direction et supervision</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="role-option" data-role="admin">
-                                                <div class="text-center">
-                                                    <i class="fas fa-user-tie fa-2x text-info mb-2"></i>
-                                                    <h6>Secrétaire</h6>
-                                                    <small class="text-muted">Gestion administrative</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="role-option" data-role="admin">
-                                                <div class="text-center">
-                                                    <i class="fas fa-calculator fa-2x text-warning mb-2"></i>
-                                                    <h6>Comptable</h6>
-                                                    <small class="text-muted">Gestion financière</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="role-option" data-role="enseignant">
-                                                <div class="text-center">
-                                                    <i class="fas fa-chalkboard-teacher fa-2x text-danger mb-2"></i>
-                                                    <h6>Enseignant</h6>
-                                                    <small class="text-muted">Enseignement et évaluation</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="role" id="selectedRole" value="{{ old('role') }}" required>
-                                    @error('role')
-                                        <div class="text-danger mt-2">{{ $message }}</div>
-                                    @enderror
+            <div class="card shadow border-0 radius-10 overflow-hidden">
+                <div class="card-header bg-primary bg-opacity-10 border-0 p-4">
+                    <h5 class="text-dark mb-0 fw-bold"><i class="fas fa-info-circle me-2 text-primary"></i>Informations de base</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ route('utilisateurs.store') }}" method="POST">
+                        @csrf
+                        
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <label for="name" class="form-label fw-bold text-dark">Nom Complet <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-user text-muted"></i></span>
+                                    <input type="text" class="form-control border-start-0 @error('name') is-invalid @enderror" 
+                                           id="name" name="name" value="{{ old('name') }}" required placeholder="Admin Nextclas">
                                 </div>
+                                @error('name')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                                <!-- Permissions spécifiques -->
-                                <div class="permission-group">
-                                    <h6><i class="fas fa-shield-alt"></i> Permissions supplémentaires</h6>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" id="permission_notes" name="permissions[]" value="gestion_notes">
-                                                <label class="form-check-label" for="permission_notes">
-                                                    Gestion des notes
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" id="permission_eleves" name="permissions[]" value="gestion_eleves">
-                                                <label class="form-check-label" for="permission_eleves">
-                                                    Gestion des élèves
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" id="permission_paiements" name="permissions[]" value="gestion_paiements">
-                                                <label class="form-check-label" for="permission_paiements">
-                                                    Gestion des paiements
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" id="permission_rapports" name="permissions[]" value="generation_rapports">
-                                                <label class="form-check-label" for="permission_rapports">
-                                                    Génération de rapports
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" id="permission_parametres" name="permissions[]" value="modification_parametres">
-                                                <label class="form-check-label" for="permission_parametres">
-                                                    Modification des paramètres
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" id="permission_export" name="permissions[]" value="export_donnees">
-                                                <label class="form-check-label" for="permission_export">
-                                                    Export des données
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-12">
+                                <label for="email" class="form-label fw-bold text-dark">Adresse Email <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                                    <input type="email" class="form-control border-start-0 @error('email') is-invalid @enderror" 
+                                           id="email" name="email" value="{{ old('email') }}" required placeholder="admin@nextclas.com">
                                 </div>
+                                @error('email')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                        </div>
 
-                        <!-- Authentification -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0"><i class="fas fa-key"></i> Authentification</h5>
+                            <div class="col-md-12">
+                                <label for="role" class="form-label fw-bold text-dark">Rôle du compte <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-user-tag text-muted"></i></span>
+                                    <select class="form-select border-start-0 @error('role') is-invalid @enderror" id="role" name="role" required>
+                                        <option value="" disabled {{ old('role') ? '' : 'selected' }}>Choisir un rôle...</option>
+                                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrateur</option>
+                                        <option value="secretaire" {{ old('role') == 'secretaire' ? 'selected' : '' }}>Secrétaire</option>
+                                        <option value="enseignant" {{ old('role') == 'enseignant' ? 'selected' : '' }}>Enseignant</option>
+                                    </select>
+                                </div>
+                                @error('role')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="password" class="form-label required">Mot de passe</label>
-                                        <div class="input-group">
-                                            <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                                   id="password" name="password" required>
-                                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
+
+                            <div class="col-12 py-3 bg-light rounded-3 px-4 mt-4">
+                                <h6 class="fw-bold mb-3"><i class="fas fa-lock me-2 text-danger"></i>Sécurité du compte</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="password" class="form-label small fw-bold">Mot de passe <span class="text-danger">*</span></label>
+                                        <div class="input-group shadow-sm">
+                                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-key text-muted"></i></span>
+                                            <input type="password" class="form-control border-start-0 @error('password') is-invalid @enderror" 
+                                                   id="password" name="password" required placeholder="Min 4 caractères">
                                         </div>
                                         @error('password')
-                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="text-danger small mt-1">{{ $message }}</div>
                                         @enderror
-                                        <small class="form-text text-muted">
-                                            Le mot de passe doit contenir au moins 8 caractères.
-                                        </small>
                                     </div>
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <label for="password_confirmation" class="form-label required">Confirmer le mot de passe</label>
-                                        <div class="input-group">
-                                            <input type="password" class="form-control" 
-                                                   id="password_confirmation" name="password_confirmation" required>
-                                            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
+
+                                    <div class="col-md-6">
+                                        <label for="password_confirmation" class="form-label small fw-bold">Confirmation <span class="text-danger">*</span></label>
+                                        <div class="input-group shadow-sm">
+                                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-check text-muted"></i></span>
+                                            <input type="password" class="form-control border-start-0" 
+                                                   id="password_confirmation" name="password_confirmation" required placeholder="Répéter mot de passe">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Boutons d'action -->
-                        <div class="d-flex justify-content-between">
-                            <a href="{{ route('utilisateurs.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-times"></i> Annuler
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Créer l'utilisateur
-                            </button>
+                            <div class="col-12 mt-4 pt-2 border-top">
+                                <div class="d-grid shadow-sm">
+                                    <button type="submit" class="btn btn-primary py-3 fw-bold fs-5">
+                                        <i class="fas fa-plus-circle me-1"></i> Créer le compte Staff
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Gestion des rôles
-    const roleOptions = document.querySelectorAll('.role-option');
-    const selectedRoleInput = document.getElementById('selectedRole');
-    
-    roleOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            // Retirer la sélection des autres options
-            roleOptions.forEach(opt => opt.classList.remove('selected'));
-            
-            // Ajouter la sélection à l'option cliquée
-            this.classList.add('selected');
-            
-            // Mettre à jour le champ caché
-            selectedRoleInput.value = this.getAttribute('data-role');
-        });
-    });
-    
-    // Toggle password visibility
-    document.getElementById('togglePassword').addEventListener('click', function() {
-        const passwordField = document.getElementById('password');
-        const icon = this.querySelector('i');
-        
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordField.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    });
-    
-    // Toggle confirm password visibility
-    document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
-        const confirmPasswordField = document.getElementById('password_confirmation');
-        const icon = this.querySelector('i');
-        
-        if (confirmPasswordField.type === 'password') {
-            confirmPasswordField.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            confirmPasswordField.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    });
-});
-</script>
-
 <style>
-.role-option {
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    padding: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 15px;
-}
-
-.role-option:hover {
-    border-color: #170B9DFF;
-    background-color: #f8f9fa;
-}
-
-.role-option.selected {
-    border-color: #170B9DFF;
-    background-color: #e6f0ff;
-    box-shadow: 0 0 0 3px rgba(23, 11, 157, 0.25);
-}
-
-.permission-group {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 20px;
-}
-
-.required::after {
-    content: " *";
-    color: #dc3545;
-}
+    .radius-10 { border-radius: 10px; }
+    .input-group-text { border-color: #dee2e6; }
+    .form-control:focus, .form-select:focus {
+        border-color: #170B9DFF;
+        box-shadow: 0 0 0 0.25rem rgba(23, 11, 157, 0.1);
+    }
 </style>
 @endsection

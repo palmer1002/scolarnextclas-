@@ -12,59 +12,68 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
         .sidebar {
             width: 250px;
-            background-color: #170B9D;
+            background-color: #170B9DFF;
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
             padding: 20px 0;
             color: white;
+            font-family: Arial, sans-serif;
+            z-index: 1000;
         }
-
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        .sidebar .logo span {
+            background: #ff6b6b;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            color: white;
+        }
+        .sidebar .logo h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: white;
+        }
         .content {
             margin-left: 250px;
             padding: 20px;
+            background-color: #f5f5f5;
+            min-height: 100vh;
         }
-
         .sidebar ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
-
-        .sidebar ul li {
-            padding: 12px 20px;
+        .sidebar li {
+            padding: 15px 20px;
         }
-
-        .sidebar ul li.active,
-        .sidebar ul li:hover {
-            background-color: rgba(255, 255, 255, 0.15);
+        .sidebar li.active {
+            background-color: #7d6ae8;
         }
-
-        .sidebar ul li a {
+        .sidebar li a {
             color: white;
             text-decoration: none;
             display: flex;
             align-items: center;
         }
-
-        .sidebar ul li a i {
+        .sidebar li a i {
             margin-right: 10px;
-        }
-
-        .logo {
+            width: 20px;
             text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo h3 {
-            color: white;
         }
     </style>
 </head>
@@ -72,9 +81,9 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="logo d-flex align-items-center justify-content-center">
-            @include('partials.login-logo', ['class' => 'me-2 text-white'])
-            <h3 style="margin:0;color:white;">ScolarNextClas</h3>
+        <div class="logo">
+            <span>$</span>
+            <h3>ScolarNextClas</h3>
         </div>
 
         {{-- Menu dynamique --}}
@@ -87,5 +96,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

@@ -30,7 +30,7 @@
                     <th>Nom</th>
                     <th>Code</th>
                     <th>Coefficient</th>
-                    <th>Actions</th>
+                    <th class="text-end pe-4">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,19 +40,20 @@
                         <td>{{ $matiere->nom }}</td>
                         <td>{{ $matiere->code }}</td>
                         <td>{{ $matiere->coefficient }}</td>
-                        <td class="d-flex gap-1">
-                            <a href="{{ route('matieres.edit', $matiere->id) }}" class="btn btn-warning btn-sm">
-                                <i class="fa-solid fa-pen-to-square"></i> Modifier
-                            </a>
+                        <td class="text-end pe-4">
+                            <div class="d-flex justify-content-end gap-1">
+                                <a href="{{ route('matieres.edit', $matiere->id) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
 
-                            {{-- Suppression --}}
-                            <form action="{{ route('matieres.destroy', $matiere->id) }}" method="POST" class="delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fa-solid fa-trash"></i> Supprimer
-                                </button>
-                            </form>
+                                <form action="{{ route('matieres.destroy', $matiere->id) }}" method="POST" class="m-0 delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty

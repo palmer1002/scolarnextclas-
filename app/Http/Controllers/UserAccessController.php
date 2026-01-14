@@ -6,19 +6,21 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Mail;
 
 class UserAccessController extends Controller
 {
     /**
-     * Display a listing of users.
+     * Display a listing of administrative users.
      */
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $role = $request->input('role');
         
-        $query = User::query();
+        // Only fetch users that belong to administration
+        // Note: Currently roles are stored as a string. We might want to expand these roles.
+        // For now, it seems 'admin' is the catch-all for staff in web.php.
+        // We will filter out parents and eleves. Administrative staff includes admin, secretaire, and enseignants (accounts).
+        $query = User::whereNotIn('role', ['parent', 'eleve']);
         
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -27,35 +29,31 @@ class UserAccessController extends Controller
             });
         }
         
-        if ($role && $role !== 'all') {
-            $query->where('role', $role);
-        }
-        
         $users = $query->orderBy('created_at', 'desc')->paginate(15);
-        $roles = ['admin', 'enseignant', 'parent', 'eleve'];
+        $roles = ['admin', 'secretaire', 'enseignant'];
         
         return view('Utilisateurs.index', compact('users', 'roles'));
     }
     
     /**
-     * Show the form for creating a new user.
+     * Show the form for creating a new administrative user.
      */
     public function create()
     {
-        $roles = ['admin', 'enseignant', 'parent', 'eleve'];
+        $roles = ['admin', 'secretaire', 'enseignant']; 
         return view('Utilisateurs.create', compact('roles'));
     }
     
     /**
-     * Store a newly created user in storage.
+     * Store a newly created administrative user in storage.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => ['required', Rule::in(['admin', 'enseignant', 'parent', 'eleve'])],
+            'password' => 'required|string|min:4|confirmed',
+            'role' => ['required', Rule::in(['admin', 'secretaire', 'enseignant'])],
         ]);
         
         try {
@@ -64,10 +62,11 @@ class UserAccessController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'role' => $validated['role'],
+                'status' => 'active',
             ]);
             
             return redirect()->route('utilisateurs.index')
-                ->with('success', 'Utilisateur créé avec succès !');
+                ->with('success', 'Compte administratif créé avec succès !');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
@@ -80,7 +79,7 @@ class UserAccessController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::whereNotIn('role', ['parent', 'eleve'])->findOrFail($id);
         return view('Utilisateurs.show', compact('user'));
     }
     
@@ -89,8 +88,8 @@ class UserAccessController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-        $roles = ['admin', 'enseignant', 'parent', 'eleve'];
+        $user = User::whereNotIn('role', ['parent', 'eleve'])->findOrFail($id);
+        $roles = ['admin', 'secretaire', 'enseignant'];
         return view('Utilisateurs.edit', compact('user', 'roles'));
     }
     
@@ -99,12 +98,12 @@ class UserAccessController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::whereNotIn('role', ['parent', 'eleve'])->findOrFail($id);
         
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            'role' => ['required', Rule::in(['admin', 'enseignant', 'parent', 'eleve'])],
+            'role' => ['required', Rule::in(['admin', 'secretaire', 'enseignant'])],
         ]);
         
         try {
@@ -114,10 +113,9 @@ class UserAccessController extends Controller
                 'role' => $validated['role'],
             ]);
             
-            // If password is provided, update it
             if ($request->filled('password')) {
                 $request->validate([
-                    'password' => 'required|string|min:8|confirmed',
+                    'password' => 'required|string|min:4|confirmed',
                 ]);
                 
                 $user->update([
@@ -126,7 +124,7 @@ class UserAccessController extends Controller
             }
             
             return redirect()->route('utilisateurs.show', $user->id)
-                ->with('success', 'Utilisateur mis à jour avec succès !');
+                ->with('success', 'Compte mis à jour avec succès !');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
@@ -139,7 +137,7 @@ class UserAccessController extends Controller
      */
     public function activate($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::whereNotIn('role', ['parent', 'eleve'])->findOrFail($id);
         $user->status = 'active';
         $user->save();
 
@@ -151,7 +149,7 @@ class UserAccessController extends Controller
      */
     public function deactivate($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::whereNotIn('role', ['parent', 'eleve'])->findOrFail($id);
         $user->status = 'inactive';
         $user->save();
 
@@ -164,9 +162,8 @@ class UserAccessController extends Controller
     public function destroy($id)
     {
         try {
-            $user = User::findOrFail($id);
+            $user = User::whereNotIn('role', ['parent', 'eleve'])->findOrFail($id);
             
-            // Prevent deleting the main admin user
             if ($user->role === 'admin' && User::where('role', 'admin')->count() <= 1) {
                 return redirect()->back()
                     ->with('error', 'Impossible de supprimer le dernier administrateur.');

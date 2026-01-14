@@ -45,6 +45,11 @@ class Classe extends Model
         return $this->hasMany(Eleve::class);
     }
 
+    public function enseignants(): BelongsToMany
+    {
+        return $this->belongsToMany(Enseignant::class, 'classe_enseignant');
+    }
+
     public function getNomCompletAttribute(): string
     {
         // Afficher uniquement le niveau

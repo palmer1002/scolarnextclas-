@@ -16,13 +16,14 @@
 <body>
     <div class="header">
         <h1>ScolarNextClas</h1>
-        <h2>Bulletin de Notes - {{ ucfirst($periode) }}</h2>
+        <h2>Bulletin de Notes</h2>
+        <p><strong>Période :</strong> {{ $periode }}</p>
     </div>
 
     <div class="info">
-        <strong>Nom :</strong> {{ $eleve->nom }} {{ $eleve->prenom }}<br>
+        <strong>Nom :</strong> {{ $eleve->nomComplet }}<br>
         <strong>Matricule :</strong> {{ $eleve->matricule }}<br>
-        <strong>Classe :</strong> {{ $eleve->classe }}
+        <strong>Classe :</strong> {{ $eleve->classe->nom ?? '—' }}
     </div>
 
     <table>

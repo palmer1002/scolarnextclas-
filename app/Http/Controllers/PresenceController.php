@@ -33,22 +33,15 @@ class PresenceController extends Controller
             'statut' => 'required|in:present,absent,retard',
         ]);
 
-        $eleve = Eleve::find($request->eleve_id);
+        $eleve = Eleve::findOrFail($request->eleve_id);
         
-        // Use first() to avoid duplicates for same day
         Presence::updateOrCreate(
             [
                 'eleve_id' => $request->eleve_id, 
                 'date' => $request->date
             ],
             [
-                'classe_id' => $eleve->classe, // Assuming classe is stored as ID, if string need conversion. Migration says string?? Let's check. 
-                // Migration says 'classe' is string in eleves, but presences has 'classe_id'.
-                // Ideally Eleve should have 'classe_id'. For now, we might leave classe_id null if we can't map it, or we need to fix Eleve schema.
-                // Re-checking Eleve schema: $table->string('classe', 100); 
-                // Re-checking Presence schema: $table->foreignId('classe_id')... constrained.
-                // Mismatch detected. I will leave classe_id null for now or try to find classe by name.
-                // 'classe_id' => Classe::where('nom', $eleve->classe)->first()?->id,
+                'classe_id' => $eleve->classe_id,
                 'statut' => $request->statut,
                 'justifie' => $request->justifie ?? false,
                 'motif' => $request->motif
@@ -58,16 +51,34 @@ class PresenceController extends Controller
         return back()->with('success', 'Présence enregistrée.');
     }
 
+    public function storeForEleve(Request $request, $eleve_id)
+    {
+        $request->validate([
+            'date' => 'required|date',
+        ]);
+
+        $eleve = Eleve::findOrFail($eleve_id);
+        
+        Presence::updateOrCreate(
+            [
+                'eleve_id' => $eleve_id, 
+                'date' => $request->date
+            ],
+            [
+                'classe_id' => $eleve->classe_id,
+                'statut' => $request->present ? 'present' : 'absent',
+            ]
+        );
+
+        return back()->with('success', 'Présence enregistrée avec succès.');
+    }
+
     /**
      * Get statistics for a student.
      */
     public function stats($eleve_id)
     {
-        $stats = [
-            'total' => Presence::where('eleve_id', $eleve_id)->count(),
-            'absences' => Presence::where('eleve_id', $eleve_id)->absent()->count(),
-            'retards' => Presence::where('eleve_id', $eleve_id)->retard()->count(),
-        ];
-        return response()->json($stats);
+        $eleve = Eleve::findOrFail($eleve_id);
+        return view('Eleves.presence', compact('eleve'));
     }
 }

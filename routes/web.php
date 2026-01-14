@@ -14,6 +14,7 @@ use App\Http\Controllers\EmploiDuTempsController;
 use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\AlerteController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ClasseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -62,11 +63,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Notes
     Route::get('/notes', [NoteController::class, 'index'])->name('notes.index');
+    Route::get('/notes/create', [NoteController::class, 'create'])->name('notes.create');
+    Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
 
     // Présences
     Route::get('/presences', [PresenceController::class, 'index'])->name('presences.index');
     Route::post('/presences', [PresenceController::class, 'store'])->name('presences.store');
     Route::get('/eleves/{eleve}/presence', [PresenceController::class, 'stats'])->name('eleves.presence.stats');
+    Route::post('/eleves/{eleve}/presence', [PresenceController::class, 'storeForEleve'])->name('eleves.presence.store');
 
     // Bulletins (PDF, Calcul)
     Route::get('/bulletins', [BulletinController::class, 'index'])->name('bulletins.index');
@@ -88,7 +92,11 @@ Route::middleware(['auth'])->group(function () {
     // Matières
     Route::resource('matieres', MatiereController::class)->parameters(['matieres' => 'matiere']);
 
+    // Classes
+    Route::resource('classes', ClasseController::class);
+
     // Paiements
+    Route::get('/paiements/{paiement}/download', [\App\Http\Controllers\PaiementController::class, 'downloadReceipt'])->name('paiements.download');
     Route::resource('paiements', \App\Http\Controllers\PaiementController::class);
 });
 
@@ -96,7 +104,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('eleves', EleveController::class)->parameters(['eleves' => 'eleve']);
     Route::resource('enseignants', EnseignantController::class);
-    Route::resource('parents', ParentController::class);
+    Route::resource('parents', ParentController::class)->parameters(['parents' => 'parents']);
     
     // User Management
     Route::patch('/utilisateurs/{utilisateur}/activate', [UserAccessController::class, 'activate'])->name('utilisateurs.activate');
@@ -106,4 +114,32 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Bulletins Create
     Route::get('/bulletins/create', [BulletinController::class, 'create'])->name('bulletins.create');
     Route::post('/bulletins/store', [BulletinController::class, 'store'])->name('bulletins.store');
+});
+
+Route::get('/manual-sync-test', function () {
+    try {
+        $e = \App\Models\Enseignant::first();
+        if (!$e) return "No teacher found - create one first";
+        
+        $c = \App\Models\Classe::first();
+        if (!$c) return "No class found - create one first";
+
+        echo "<h1>Sync Test</h1>";
+        echo "Teacher: {$e->first_name} {$e->last_name} (ID: {$e->id})<br>";
+        echo "Class: {$c->nom} (ID: {$c->id})<br>";
+
+        echo "Attempting sync...<br>";
+        $e->classes()->sync([$c->id]); 
+        
+        echo "Sync executed.<br>";
+        
+        $count = $e->classes()->count();
+        echo "Eloquent Classes count: {$count}<br>";
+        
+        $dbCount = \Illuminate\Support\Facades\DB::table('classe_enseignant')->where('enseignant_id', $e->id)->count();
+        echo "DB Table Count: {$dbCount}";
+
+    } catch (\Exception $ex) {
+        echo "Error: " . $ex->getMessage();
+    }
 });

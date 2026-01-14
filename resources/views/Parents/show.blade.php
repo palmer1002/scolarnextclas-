@@ -1,86 +1,109 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="content">
-    <!-- Navbar -->
-    <div class="navbar">
-        <div>
-            <h1><i class="fas fa-users"></i> Gestion des Parents</h1>
-            <p>Administrez les informations des parents et tuteurs des élèves</p>
-        </div>
-        <div style="display: flex; gap: 15px;">
-            <span style="padding: 5px 15px; border: 1px solid #ddd; background: #f0f0f0; font-size: 0.9rem; cursor: pointer;">
-                Année 2025-2026
-            </span>
-        </div>
-    </div>
+@section('title', 'Détails du Parent')
 
-    <!-- Page de détails -->
-    <div class="container">
-        <section class="card detail-card">
-            <div class="detail-header">
-                <h2 class="card-title"><i class="fas fa-user"></i> Détails du parent</h2>
-                <div>
-                    <a href="{{ route('parents.index') }}" class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i> Retour
-                    </a>
-                    <a href="{{ route('parents.edit', $parent->id) }}" class="btn btn-warning">
-                        <i class="fas fa-edit"></i> Modifier
-                    </a>
-                </div>
+@section('content')
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-primary"><i class="fas fa-user-circle me-2"></i> Détails du Parent</h2>
+                <a href="{{ route('parents.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Retour
+                </a>
             </div>
 
-            <div id="parentDetails">
-                <div class="detail-row">
-                    <div class="detail-label">Nom complet:</div>
-                    <div class="detail-value"><strong>{{ $parent->name }}</strong></div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Téléphone:</div>
-                    <div class="detail-value">{{ $parent->phone }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Email:</div>
-                    <div class="detail-value">{{ $parent->email ?: 'Non renseigné' }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Adresse:</div>
-                    <div class="detail-value">{{ $parent->address ?: 'Non renseignée' }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Relation:</div>
-                    <div class="detail-value">{{ $parent->relation }}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Statut:</div>
-                    <div class="detail-value">
-                        <span class="{{ $parent->status === 'active' ? 'status-active' : 'status-inactive' }}">
-                            {{ $parent->status === 'active' ? 'Actif' : 'Inactif' }}
-                        </span>
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Élève(s) associé(s):</div>
-                    <div class="detail-value">
-                        <div class="students-list">
-                            @foreach($parent->students as $student)
-                                <span class="badge">{{ $student->first_name }} {{ $student->last_name }} ({{ $student->student_code }})</span>
-                            @endforeach
+            <div class="card shadow border-0 radius-10">
+                <div class="card-header bg-primary text-white p-3 radius-top-10">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">{{ $parent->nom_complet }}</h4>
+                        <div>
+                            <span class="badge bg-light text-primary me-2">{{ $parent->relation }}</span>
+                            @if($parent->statut == 'active')
+                                <span class="badge bg-success border border-white">Actif</span>
+                            @else
+                                <span class="badge bg-danger border border-white">Inactif</span>
+                            @endif
                         </div>
                     </div>
                 </div>
-                @if($parent->notes)
-                <div class="detail-row">
-                    <div class="detail-label">Notes:</div>
-                    <div class="detail-value">{{ $parent->notes }}</div>
-                </div>
-                @endif
-                <div class="detail-row">
-                    <div class="detail-label">Date d'inscription:</div>
-                    <div class="detail-value">{{ $parent->created_at->format('d/m/Y') }}</div>
+
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5 class="text-secondary border-bottom pb-2 mb-3">Coordonnées</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between bg-transparent">
+                                    <span class="fw-bold text-muted">Téléphone:</span>
+                                    <span>{{ $parent->telephone }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between bg-transparent">
+                                    <span class="fw-bold text-muted">Email:</span>
+                                    <span>{{ $parent->email ?: 'Non renseigné' }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between bg-transparent">
+                                    <span class="fw-bold text-muted">Adresse:</span>
+                                    <span class="text-end">{{ $parent->adresse ?: 'Non renseignée' }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between bg-transparent">
+                                    <span class="fw-bold text-muted">Profession:</span>
+                                    <span>{{ $parent->profession ?: 'Non renseignée' }}</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5 class="text-secondary border-bottom pb-2 mb-3">Enfants Associés</h5>
+                            @if($parent->students->count() > 0)
+                                <div class="list-group">
+                                    @foreach($parent->students as $student)
+                                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="fas fa-user-graduate me-2 text-primary"></i>
+                                                {{ $student->nom }} {{ $student->prenom }}
+                                            </div>
+                                            <span class="badge bg-light text-dark border">{{ $student->matricule }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle me-2"></i> Aucun élève associé.
+                                </div>
+                            @endif
+                        </div>
+
+                        @if($parent->notes)
+                        <div class="col-12 mt-4">
+                            <div class="bg-light p-3 rounded border">
+                                <h6 class="fw-bold text-muted mb-2">Notes supplémentaires:</h6>
+                                <p class="mb-0 text-dark">{{ $parent->notes }}</p>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                    
+                    <div class="d-flex justify-content-end mt-4 pt-3 border-top gap-2">
+                        <a href="{{ route('parents.edit', $parent->id) }}" class="btn btn-warning">
+                            <i class="fas fa-edit me-1"></i> Modifier
+                        </a>
+                        <form action="{{ route('parents.destroy', $parent->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr ?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i> Supprimer
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
 </div>
+
+<style>
+    .radius-10 { border-radius: 10px; }
+    .radius-top-10 { border-top-left-radius: 10px; border-top-right-radius: 10px; }
+    .list-group-item { border: none; padding-left: 0; padding-right: 0; }
+</style>
 @endsection

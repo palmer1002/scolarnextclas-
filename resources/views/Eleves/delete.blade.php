@@ -1,49 +1,56 @@
 @extends('layouts.app')
 
-@section('title', 'Supprimer ' . $eleve->nom_complet . ' - ScolarNextClas')
+@section('title', 'Supprimer Élève - ' . $eleve->nom_complet)
 
 @section('content')
-<div class="container">
-    <section class="card">
-        <div class="delete-confirmation">
-            <div class="delete-icon">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <h2>Confirmer la suppression</h2>
-            <p style="margin: 20px 0; font-size: 1.1rem; color: #666;">
-                Êtes-vous sûr de vouloir supprimer <strong>{{ $eleve->nom_complet }}</strong> ({{ $eleve->matricule }}) ?
-            </p>
-            <p style="margin: 20px 0; color: #dc3545;">
-                <i class="fas fa-exclamation-circle"></i> Cette action est irréversible et supprimera toutes les données associées à cet élève.
-            </p>
-            
-            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
-                <a href="{{ route('eleves.show', $eleve->id) }}" class="btn btn-outline">
-                    <i class="fas fa-times"></i> Annuler
-                </a>
-                <form action="{{ route('eleves.destroy', $eleve->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous vraiment sûr ?')">
-                        <i class="fas fa-trash"></i> Confirmer la suppression
-                    </button>
-                </form>
+<div class="container-fluid">
+    <div class="row justify-content-center pt-5">
+        <div class="col-md-6 col-lg-5 text-center">
+            <div class="card shadow border-0 radius-10">
+                <div class="card-body p-5">
+                    <div class="delete-icon-wrapper mb-4">
+                        <i class="fas fa-exclamation-triangle fa-4x text-danger animate__animated animate__pulse animate__infinite"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark mb-3">Confirmation de suppression</h2>
+                    <p class="text-secondary fs-5 mb-4">
+                        Êtes-vous certain de vouloir supprimer l'élève <br>
+                        <strong class="text-dark">{{ $eleve->nom_complet }}</strong> ({{ $eleve->matricule }}) ?
+                    </p>
+                    
+                    <div class="alert alert-danger border-0 shadow-sm mb-4">
+                        <i class="fas fa-exclamation-circle me-1"></i> 
+                        <strong>Attention :</strong> Cette action est irréversible et supprimera toutes les données liées à cet élève (notes, présence, etc.).
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a href="{{ route('eleves.show', $eleve->id) }}" class="btn btn-light border px-4 fw-bold">
+                            <i class="fas fa-times me-1"></i> Annuler
+                        </a>
+                        <form action="{{ route('eleves.destroy', $eleve->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger px-4 fw-bold shadow-sm">
+                                <i class="fas fa-trash me-1"></i> Supprimer définitivement
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 </div>
-@endsection
 
-@section('styles')
 <style>
-    .delete-confirmation {
-        text-align: center;
-        padding: 40px 20px;
-    }
-    .delete-icon {
-        font-size: 4rem;
-        color: #dc3545;
-        margin-bottom: 20px;
+    .radius-10 { border-radius: 10px; }
+    .delete-icon-wrapper {
+        background: rgba(220, 53, 69, 0.1);
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto;
     }
 </style>
 @endsection

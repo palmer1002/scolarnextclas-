@@ -12,8 +12,54 @@ class BulletinController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
+        $query = \App\Models\Bulletin::with(['eleve.classe']);
+
+        if ($user->role === 'eleve') {
+            $query->whereHas('eleve', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        } elseif ($user->role === 'parent') {
+            $query->whereHas('eleve.parent', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+
+        $bulletins = $query->latest()->get();
+        return view('Bulletins.index', compact('bulletins'));
+    }
+
+    public function create()
+    {
         $eleves = Eleve::all();
-        return view('Bulletins.index', compact('eleves'));
+        return view('Bulletins.create', compact('eleves'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'eleve_id' => 'required|exists:eleves,id',
+            'type_periode' => 'required|in:Trimestre,Semestre',
+            'numero_periode' => 'required|integer|min:1|max:3',
+            'annee_scolaire' => 'required|string',
+        ]);
+
+        $periode = $validated['type_periode'] . '-' . $validated['numero_periode'];
+        $data = $this->calculateBulletin($validated['eleve_id'], $periode);
+
+        \App\Models\Bulletin::updateOrCreate(
+            [
+                'eleve_id' => $validated['eleve_id'],
+                'type_periode' => $validated['type_periode'],
+                'numero_periode' => $validated['numero_periode'],
+                'annee_scolaire' => $validated['annee_scolaire']
+            ],
+            [
+                'moyenne' => $data['moyenneGenerale']
+            ]
+        );
+
+        return redirect()->route('bulletins.index')->with('success', 'Bulletin calculé et enregistré avec succès.');
     }
 
     public function show($eleve_id, $periode)
@@ -31,7 +77,7 @@ class BulletinController extends Controller
 
     private function calculateBulletin($eleve_id, $periode)
     {
-        $eleve = Eleve::findOrFail($eleve_id);
+        $eleve = Eleve::with('classe')->findOrFail($eleve_id);
         
         // Parse period format "Type-Numero" e.g. "Trimestre-1"
         $parts = explode('-', $periode);

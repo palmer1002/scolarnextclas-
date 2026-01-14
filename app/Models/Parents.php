@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ParentModel extends Model
+class Parents extends Model
 {
     use HasFactory;
 
@@ -18,6 +18,9 @@ class ParentModel extends Model
         'email',
         'adresse',
         'profession',
+        'relation',
+        'statut',
+        'notes',
     ];
 
     public function user()
@@ -25,8 +28,8 @@ class ParentModel extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function eleves()
+    public function students()
     {
-        return $this->hasMany(Eleve::class, 'parent_id'); // We need to ensure Eleve has parent_id or use user_id logic
+        return $this->hasMany(Eleve::class, 'parent_id');
     }
 }

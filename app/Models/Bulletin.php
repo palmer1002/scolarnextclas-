@@ -14,8 +14,8 @@ class Bulletin extends Model
 
     protected $fillable = [
         'eleve_id',
-        'trimestre',
-        'semestre',
+        'type_periode',
+        'numero_periode',
         'moyenne',
         'annee_scolaire',
     ];

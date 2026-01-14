@@ -1,416 +1,174 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>ScolarNextClas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        .sidebar {
-            width: 250px;
-            background-color: #170B9DFF;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 20px 0;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-        .sidebar .logo {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 0 20px;
-        }
-        .sidebar .logo span {
-            background: #ff6b6b;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-            font-weight: bold;
-            color: white;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar li {
-            padding: 15px 20px;
-            
-          
-        }
-        .sidebar li.active {
-            background-color: #7d6ae8;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-            background-color: #f5f5f5;
-            min-height: 100vh;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background: white;
-            border-bottom: 1px solid #ddd;
-            font-family: Arial, sans-serif;
-        }
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .alert-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        .alert-header {
-            font-weight: bold;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-        }
-        .alert-item {
-            background: #fff5f5;
-            border: 1px solid #FF6B6B;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 10px;
-        }
-        .recent-students {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        .student-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f0f0f0;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 8px;
-        }
+@extends('layouts.app')
 
-        .logo img { width: 80px;
-             height: 80px;
-             border-radius: 12px;
-             display: block; margin: 0 auto 10px auto;
-            }
-         .logo h3 { font-size: 20px;
-             margin-top: 5px; }
+@section('title', 'Tableau de bord - ScolarNextClas')
 
-         .sidebar { text-align: center;
-            }   
-    </style>
-</head>
-<body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-    
-            <span><img src="{{ asset('images/logo.png') }}" alt="Logo ScolarNextClas" style="width:100px; height:100px; border-radius:8px;"></span>
-
-            <h3>ScolarNextClas</h3>
-      
-        <ul>
-            <li class="active">
-    <a href="/" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-chart-pie" style="margin-right: 10px;"></i> Tableau de bord
-    </a>
-</li>
-
-<li>
-    <a href="/eleves" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-user-graduate" style="margin-right: 10px;"></i> Élèves
-    </a>
-</li>
-
-<li>
-    <a href="/notes" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-pen-to-square" style="margin-right: 10px;"></i> Notes
-    </a>
-</li>
-
-<li>
-    <a href="/bulletins" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-file-alt" style="margin-right: 10px;"></i> Bulletins
-    </a>
-</li>
-
-<li>
-    <a href="/enseignants" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-chalkboard-teacher" style="margin-right: 10px;"></i> Enseignants
-    </a>
-</li>
-
-<li>
-    <a href="/parents" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-users" style="margin-right: 10px;"></i> Parents
-    </a>
-</li>
-
-<li>
-    <a href="/evenements" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-calendar-days" style="margin-right: 10px;"></i> Événements
-    </a>
-</li>
-
-<li>
-    <a href="/paiement" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-money-bill-wave" style="margin-right: 10px;"></i> Paiement
-    </a>
-</li>
-
-<li>
-    <a href="/cantine" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-utensils" style="margin-right: 10px;"></i> Cantine
-    </a>
-</li>
-
-<li>
-    <a href="/utilisateurs" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-user-group" style="margin-right: 10px;"></i> Utilisateurs
-    </a>
-</li>
-
-<li>
-    <a href="/chat" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-comments" style="margin-right: 10px;"></i> Chat
-    </a>
-</li>
-
-<li>
-    <a href="/activite" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <i class="fas fa-chart-line" style="margin-right: 10px;"></i> Activité
-    </a>
-</li>
-        </ul>
-    </div>
-
-    <!-- Contenu principal -->
-    <div class="content">
-        <!-- Navbar -->
-        <div class="navbar">
-            <div>
-                <h1>Tableau de bord</h1>
-                <p>Plateforme de Gestion Scolaire Numérique</p>
-            </div>
-            <div style="display: flex; gap: 15px;">
-
-                <span style="padding: 5px 15px; border: 1px solid #ddd; background: #f0f0f0; font-size: 0.9rem; cursor: pointer;">
-                    Année 2025-2026
-                </span>
-            </div>
+@section('content')
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Tableau de Bord</h1>
+            <p class="mb-0 text-muted">Aperçu global de votre établissement - Année 2025-2026</p>
         </div>
-
-        <!-- Statistiques -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
-            <!-- Total Élèves -->
-            <div class="card">
-    <div>
-        <p>Total Élèves</p>
-        <h2>3</h2>
-        <p style="font-size: 0.8rem; color: #999;">Inscrits cette année</p>
-    </div>
-    <div style="font-size: 1.5rem;">
-        <i class="fas fa-users"></i> <!-- Group icon -->
-    </div>
-    </div>
-            <!-- Notes Enregistrées -->
-            <div class="card">
-    <div>
-        <p>Notes Enregistrées</p>
-        <h2>6</h2>
-        <p style="font-size: 0.8rem; color: #999;">Sur 2 trimestres</p>
-    </div>
-    <div style="font-size: 1.5rem;">
-        <i class="fas fa-clipboard-list"></i>
-    </div>
+        <div class="d-none d-sm-inline-block">
+             <span class="badge bg-light text-primary border p-2">
+                <i class="fas fa-calendar-day me-1"></i> {{ now()->translatedFormat('d F Y') }}
+             </span>
+        </div>
     </div>
 
-            <!-- Moyenne Générale -->
-            <div class="card">
-    <div>
-        <p>Moyenne Générale</p>
-        <h2>12.89/20</h2>
-        <p style="font-size: 0.8rem; color: #999;">Tous élèves confondus</p>
-    </div>
-    <div style="font-size: 1.5rem;">
-        <i class="fas fa-chart-line"></i> <!-- Line chart for trends -->
-    </div>
-</div>
-
-
-            <!-- Alertes Actives -->
-            <div class="card">
-                <div>
-                    <p>Alertes Actives</p>
-                    <h2 style="color: #9D1414FF;">2</h2>
-                    <p style="font-size: 0.8rem; color: #999;">Chutes de notes détectées</p>
+    <!-- Statistiques -->
+    <div class="row g-4 mb-4">
+        <!-- Total Élèves -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm radius-10 h-100 border-start border-4 border-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Élèves</div>
+                            <div class="h4 mb-0 fw-bold">3</div>
+                            <div class="small text-muted mt-1">Inscrits cette année</div>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
                 </div>
-                <div style="font-size: 1.5rem; color: #9D1414FF;">⚠️</div>
             </div>
         </div>
 
-<!-- Alerte négative -->
-<div class="alert-card negative">
-    <div class="alert-header" style="color: #B60A0AFF;">⚠️ Alertes Intelligentes - IA</div>
-    <p style="font-size: 0.9rem; color: #666; margin: 0 0 15px 0;">
-        Système d'alerte automatique pour les chutes de notes supérieures à 20%
-    </p>
-    <div class="alert-item">
-        <div style="display: flex; align-items: center; margin-bottom: 5px;">
-            <span style="margin-right: 10px; font-size: 1.2rem; color: #9D1414FF;">⚠️</span>
-            <strong>Amina Diallo (SNC2024001)</strong>
+        <!-- Notes Enregistrées -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm radius-10 h-100 border-start border-4 border-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Notes Enregistrées</div>
+                            <div class="h4 mb-0 fw-bold">6</div>
+                            <div class="small text-muted mt-1">Sur 2 trimestres</div>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success">
+                            <i class="fas fa-clipboard-list fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666;">
-            Chute de 26.9% détectée entre T1 (14.89) et T2 (10.89)
-        </p>
-        <p style="margin: 10px 0 0 0; font-size: 0.8rem; color: #999;">
-            Contact parent: +228 90 90 90 90
-        </p>
-    </div>
-</div>
 
-<!-- Alerte positive -->
-<div class="alert-card positive">
-    <div class="alert-header" style="color: #4CAF50;">⬆️ Alertes Intelligentes - IA</div>
-    <p style="font-size: 0.9rem; color: #666; margin: 0 0 15px 0;">
-        Système d'alerte automatique pour les améliorations de notes supérieures à 20%
-    </p>
-    <div class="alert-item">
-        <div style="display: flex; align-items: center; margin-bottom: 5px;">
-            <span style="margin-right: 10px; font-size: 1.2rem; color: #4CAF50;">⬆️</span>
-            <strong>Ray Kokoroko (SNC2024002)</strong>
+        <!-- Moyenne Générale -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm radius-10 h-100 border-start border-4 border-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Moyenne Générale</div>
+                            <div class="h4 mb-0 fw-bold">12.89/20</div>
+                            <div class="small text-muted mt-1">Tous élèves confondus</div>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded-circle text-info">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666;">
-            Amélioration de 26.9% détectée entre T1 (10.89) et T2 (14.89)
-        </p>
-        <p style="margin: 10px 0 0 0; font-size: 0.8rem; color: #999;">
-            Contact parent: +228 90 90 90 90
-        </p>
-    </div>
-</div>
 
-        <!-- Élèves Récents -->
-        <div class="recent-students">
-    <h3>Élèves Récents</h3>
-    <p style="font-size: 0.9rem; color: #666; margin: 0 0 15px 0;">
-        Liste des derniers élèves inscrits
-    </p>
-
-    <div class="student-row">
-        <div class="student-info">
-            <strong>Amina Diallo</strong> - SNC2024001
-            <span class="small-class">
-                Classe: 4e  | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
-            </span>
-        </div>
-        <div class="student-meta">
-            <span class="small-muted">Inscrit le 01/09/2024</span>
+        <!-- Alertes Actives -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm radius-10 h-100 border-start border-4 border-danger">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Alertes Actives</div>
+                            <div class="h4 mb-0 fw-bold text-danger">2</div>
+                            <div class="small text-muted mt-1">Chutes de notes détectées</div>
+                        </div>
+                        <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger">
+                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="student-row">
-        <div class="student-info">
-            <strong>Ray Kokoroko</strong> - SNC2024002
-            <span class="small-class">
-                Classe: Tle  | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
-            </span>
-        </div>
-        <div class="student-meta">
-            <span class="small-muted">Inscrit le 05/09/2024</span>
-        </div>
-    </div>
+    <div class="row g-4 mb-4">
+        <!-- Alertes IA -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm radius-10">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-robot me-2 text-primary"></i>Analyses Intelligentes - IA</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Alerte négative -->
+                    <div class="alert bg-danger bg-opacity-10 border-0 border-start border-4 border-danger mb-3 p-3">
+                        <div class="d-flex align-items-center mb-2">
+                             <span class="me-2 fs-5">⚠️</span>
+                             <strong class="text-danger">Amina Diallo (SNC2024001)</strong>
+                        </div>
+                        <p class="mb-2 small">Chute de 26.9% détectée entre T1 (14.89) et T2 (10.89)</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted"><i class="fas fa-phone me-1"></i> +228 90 90 90 90</span>
+                            <a href="#" class="btn btn-sm btn-outline-danger py-0 px-2 fw-bold">Alerter Parent</a>
+                        </div>
+                    </div>
 
-    <div class="student-row">
-        <div class="student-info">
-            <strong>Arnaud Klanlenou</strong> - SNC2024003
-            <span class="small-class">
-                Classe: 3e | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
-            </span>
+                    <!-- Alerte positive -->
+                    <div class="alert bg-success bg-opacity-10 border-0 border-start border-4 border-success p-3">
+                        <div class="d-flex align-items-center mb-2">
+                             <span class="me-2 fs-5">⬆️</span>
+                             <strong class="text-success">Ray Kokoroko (SNC2024002)</strong>
+                        </div>
+                        <p class="mb-2 small">Amélioration de 26.9% détectée entre T1 (10.89) et T2 (14.89)</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted"><i class="fas fa-phone me-1"></i> +228 90 00 00 00</span>
+                            <span class="badge bg-success">Félicitations méritées</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="student-meta">
-            <span class="small-muted">Inscrit le 10/09/2024</span>
-        </div>
-    </div>
 
-    <div class="student-row">
-        <div class="student-info">
-            <strong>Amina Kokodoro</strong> - SNC2025001
-            <span class="small-class">
-                Classe: 2nde | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
-            </span>
-        </div>
-        <div class="student-meta">
-            <span class="small-muted">Inscrit le 12/09/2024</span>
-        </div>
-    </div>
-
-    <div class="student-row">
-        <div class="student-info">
-            <strong>Brice Klanlenou</strong> - SNC2025002
-            <span class="small-class">
-                Classe: 1ère | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
-            </span>
-        </div>
-        <div class="student-meta">
-            <span class="small-muted">Inscrit le 15/09/2024</span>
-        </div>
-    </div>
-
-    <div class="student-row">
-        <div class="student-info">
-            <strong>Gifty Mensah</strong> - SNC2025003
-            <span class="small-class">
-                Classe: 6e | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
-            </span>
-        </div>
-        <div class="student-meta">
-            <span class="small-muted">Inscrit le 20/09/2024</span>
-        </div>
-    </div>
-
-    <div class="student-row">
-        <div class="student-info">
-            <strong>Samuel Yovo</strong> - SNC2025004
-            <span class="small-class">
-                Classe: 5e | <i class="fa-solid fa-mars" style="color:#0d6efd;"></i> Masculin
-            </span>
-        </div>
-        <div class="student-meta">
-            <span class="small-muted">Inscrit le 25/09/2024</span>
-        </div>
-    </div>
-
-    <div class="student-row">
-        <div class="student-info">
-            <strong>Mariam Tchalla</strong> - SNC2025005
-            <span class="small-class">
-                Classe: Tle | <i class="fa-solid fa-venus" style="color:#d63384;"></i> Féminin
-            </span>
-        </div>
-        <div class="student-meta">
-            <span class="small-muted">Inscrit le 28/09/2024</span>
+        <!-- Inscriptions Récentes -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm radius-10">
+                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-user-plus me-2 text-primary"></i>Élèves Récents</h5>
+                    <a href="{{ route('eleves.index') }}" class="btn btn-sm btn-link text-decoration-none p-0">Voir tout</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        @php
+                            $recent_students = [
+                                ['name' => 'Amina Diallo', 'id' => 'SNC2024001', 'class' => '4e', 'gender' => 'F', 'date' => '01/09/2024'],
+                                ['name' => 'Ray Kokoroko', 'id' => 'SNC2024002', 'class' => 'Tle', 'gender' => 'M', 'date' => '05/09/2024'],
+                                ['name' => 'Arnaud Klanlenou', 'id' => 'SNC2024003', 'class' => '3e', 'gender' => 'M', 'date' => '10/09/2024'],
+                                ['name' => 'Amina Kokodoro', 'id' => 'SNC2025001', 'class' => '2nde', 'gender' => 'F', 'date' => '12/09/2024']
+                            ];
+                        @endphp
+                        @foreach($recent_students as $student)
+                        <div class="list-group-item bg-transparent border-0 px-4 py-3 border-bottom d-flex align-items-center">
+                            <div class="avatar-sm me-3 bg-light text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold">
+                                {{ substr($student['name'], 0, 1) }}
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold mb-0" style="font-size: 0.9rem;">{{ $student['name'] }}</div>
+                                <div class="small text-muted">{{ $student['id'] }} • {{ $student['class'] }} • 
+                                    <i class="fas fa-{{ $student['gender'] == 'F' ? 'venus text-danger' : 'mars text-primary' }}" style="font-size: 0.7rem;"></i>
+                                </div>
+                            </div>
+                            <div class="small text-muted fst-italic">{{ $student['date'] }}</div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-</body>
-</html>
+<style>
+    .radius-10 { border-radius: 10px; }
+    .text-xs { font-size: 0.75rem; letter-spacing: 0.5px; }
+    .avatar-sm { width: 35px; height: 35px; }
+</style>
+@endsection

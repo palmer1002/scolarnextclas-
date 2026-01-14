@@ -1,132 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Details</title>
-</head>
-<body>
+@extends('layouts.app')
 
-    <div id="teacherDetailsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="teacherDetailsTitle" style="color: #170B9DFF;"></h2>
-                <button class="close-modal" onclick="closeTeacherDetailsModal()">&times;</button>
+@section('title', 'Détails Enseignant')
+
+@section('content')
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-primary"><i class="fas fa-chalkboard-teacher me-2"></i> Détails Enseignant</h2>
+                <a href="{{ route('enseignants.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Retour
+                </a>
             </div>
-            <div id="teacherDetailsContent">
-                <!-- Les détails seront chargés ici par JavaScript -->
+
+            <div class="card shadow border-0 radius-10">
+                <div class="card-header bg-primary text-white p-3 radius-top-10">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">{{ $enseignant->title }} {{ $enseignant->first_name }} {{ $enseignant->last_name }}</h4>
+                        <span class="badge bg-light text-primary">{{ $enseignant->status }}</span>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5 class="text-secondary border-bottom pb-2 mb-3">Informations Personnelles</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between bg-transparent">
+                                    <span class="fw-bold text-muted">Email:</span>
+                                    <span>{{ $enseignant->email }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between bg-transparent">
+                                    <span class="fw-bold text-muted">Téléphone:</span>
+                                    <span>{{ $enseignant->phone ?: 'Non renseigné' }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between bg-transparent">
+                                    <span class="fw-bold text-muted">Matière:</span>
+                                    <span>{{ $enseignant->subject }}</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5 class="text-secondary border-bottom pb-2 mb-3">Classes Assignées</h5>
+                            @if($enseignant->classes->count() > 0)
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($enseignant->classes as $classe)
+                                        <span class="badge bg-primary fs-6">{{ $classe->nom }}</span>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="alert alert-info py-2">
+                                    <i class="fas fa-info-circle me-1"></i> Aucune classe assignée.
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end mt-4 pt-3 border-top gap-2">
+                        <a href="{{ route('enseignants.edit', $enseignant->id) }}" class="btn btn-warning">
+                            <i class="fas fa-edit me-1"></i> Modifier
+                        </a>
+                        <form action="{{ route('enseignants.destroy', $enseignant->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr ?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i> Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        // Fonctions pour la modal d'ajout
-        function openAddTeacherModal() {
-            document.getElementById('addTeacherModal').style.display = 'block';
-        }
-
-        function closeAddTeacherModal() {
-            document.getElementById('addTeacherModal').style.display = 'none';
-            document.getElementById('teacherForm').reset();
-        }
-
-        // Gestion du formulaire
-        document.getElementById('teacherForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Récupérer les valeurs du formulaire
-            const title = document.getElementById('teacherTitle').value;
-            const lastName = document.getElementById('teacherLastName').value;
-            const firstName = document.getElementById('teacherFirstName').value;
-            const subject = document.getElementById('teacherSubject').value;
-            
-            // Simulation d'enregistrement
-            alert(`Enseignant ajouté avec succès:\n\n${title} ${lastName} ${firstName}\nMatière: ${subject}`);
-            
-            // Fermer la modal et réinitialiser le formulaire
-            closeAddTeacherModal();
-        });
-
-        // Fonctions pour la modal de détails
-        function viewTeacherDetails(teacherName) {
-            document.getElementById('teacherDetailsTitle').textContent = teacherName;
-            
-            // Simuler des données
-            const detailsContent = `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <h4 style="color: #170B9DFF; margin-bottom: 15px;">Informations personnelles</h4>
-                        <p><strong>Matricule:</strong> MAT001</p>
-                        <p><strong>Date d'embauche:</strong> 01/09/2020</p>
-                        <p><strong>Statut:</strong> Permanent</p>
-                        <p><strong>Diplôme:</strong> Master en Mathématiques</p>
-                    </div>
-                    <div>
-                        <h4 style="color: #170B9DFF; margin-bottom: 15px;">Contact</h4>
-                        <p><strong>Email:</strong> j.kouadio@school.com</p>
-                        <p><strong>Téléphone:</strong> +225 07 12 34 56</p>
-                        <p><strong>Adresse:</strong> Abidjan, Côte d'Ivoire</p>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <h4 style="color: #170B9DFF; margin-bottom: 15px;">Classes enseignées</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        <span class="class-badge" style="font-size: 14px;">6ème A (12h/sem)</span>
-                        <span class="class-badge" style="font-size: 14px;">5ème B (8h/sem)</span>
-                        <span class="class-badge" style="font-size: 14px;">Terminale C (10h/sem)</span>
-                        <span class="class-badge" style="font-size: 14px;">1ère D (6h/sem)</span>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <h4 style="color: #170B9DFF; margin-bottom: 15px;">Notes récentes</h4>
-                    <p>Dernière évaluation: 15/10/2024</p>
-                    <p>Nombre d'élèves: 145</p>
-                    <p>Moyenne générale de ses classes: 14.2/20</p>
-                </div>
-            `;
-            
-            document.getElementById('teacherDetailsContent').innerHTML = detailsContent;
-            document.getElementById('teacherDetailsModal').style.display = 'block';
-        }
-
-        function closeTeacherDetailsModal() {
-            document.getElementById('teacherDetailsModal').style.display = 'none';
-        }
-
-        // Fermer les modales en cliquant en dehors
-        window.onclick = function(event) {
-            const addModal = document.getElementById('addTeacherModal');
-            const detailsModal = document.getElementById('teacherDetailsModal');
-            
-            if (event.target == addModal) {
-                addModal.style.display = 'none';
-            }
-            if (event.target == detailsModal) {
-                detailsModal.style.display = 'none';
-            }
-        }
-
-        // Recherche en temps réel
-        document.querySelector('.search-input').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('.table-teachers tbody tr');
-            
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-
-    
-</body>
-</html>
+<style>
+    .radius-10 { border-radius: 10px; }
+    .radius-top-10 { border-top-left-radius: 10px; border-top-right-radius: 10px; }
+    .list-group-item { border: none; padding-left: 0; padding-right: 0; }
+</style>
+@endsection

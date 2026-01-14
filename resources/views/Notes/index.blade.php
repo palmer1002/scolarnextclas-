@@ -4,7 +4,14 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4"><i class="fa-solid fa-clipboard-list"></i> Liste des notes</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fa-solid fa-clipboard-list me-2"></i> Liste des notes</h2>
+        @if(in_array(Auth::user()->role, ['admin', 'secretaire', 'enseignant']))
+            <a href="{{ route('notes.create') }}" class="btn btn-primary shadow-sm">
+                <i class="fa-solid fa-plus me-1"></i> Ajouter une note
+            </a>
+        @endif
+    </div>
 
     {{-- Message de succès --}}
     @if(session('success'))
@@ -23,7 +30,7 @@
                     <th>Matière</th>
                     <th>Note</th>
                     <th>Coefficient</th>
-                    <th>Trimestre</th>
+                    <th>Période</th>
                     <th>Année scolaire</th>
                 </tr>
             </thead>
@@ -32,9 +39,9 @@
                     <tr>
                         <td>{{ optional($note->eleve)->nomComplet ?? 'Élève supprimé' }}</td>
                         <td>{{ optional($note->matiere)->nom ?? 'Matière supprimée' }}</td>
-                        <td>{{ $note->note }}</td>
-                        <td>{{ $note->coefficient }}</td>
-                        <td>{{ $note->trimestre }}</td>
+                        <td class="fw-bold">{{ $note->note }}/20</td>
+                        <td>x{{ $note->coefficient }}</td>
+                        <td>{{ $note->type_periode }} {{ $note->numero_periode }}</td>
                         <td>{{ $note->annee_scolaire }}</td>
                     </tr>
                 @empty

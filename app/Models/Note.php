@@ -12,19 +12,23 @@ class Note extends Model
     protected $fillable = [
         'eleve_id',
         'matiere_id',
-        'trimestre',
-        'semestre',
+        'type_periode',
+        'numero_periode',
         'note',
         'coefficient',
         'annee_scolaire',
     ];
-
     protected $casts = [
         'note' => 'float',
-        'trimestre' => 'integer',
-        'semestre' => 'integer',
+        'numero_periode' => 'integer',
         'coefficient' => 'integer',
     ];
+
+    // Accessor pour compatibilité avec le reste du code si nécessaire
+    public function getTrimestreAttribute()
+    {
+        return $this->type_periode === 'Trimestre' ? $this->numero_periode : null;
+    }
 
     // Relation avec Eleve
     public function eleve()

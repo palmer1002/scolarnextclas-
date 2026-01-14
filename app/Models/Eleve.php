@@ -50,6 +50,11 @@ class Eleve extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(Parents::class, 'parent_id');
+    }
+
 
 
     //  Accessor
