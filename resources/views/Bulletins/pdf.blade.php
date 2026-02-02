@@ -2,62 +2,134 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Bulletin - {{ $eleve->nom }}</title>
+    <title>Bulletin - {{ $eleve->nomComplet }}</title>
     <style>
-        body { font-family: sans-serif; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .info { margin-bottom: 20px; border: 1px solid #ccc; padding: 10px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #000; padding: 8px; text-align: center; }
-        th { background-color: #f2f2f2; }
-        .footer { margin-top: 50px; text-align: right; }
+        @page { margin: 1cm; }
+        body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 9pt; color: #333; line-height: 1.2; }
+        .company-header { text-align: center; margin-bottom: 10px; border-bottom: 2px solid #2e59d9; padding-bottom: 5px; }
+        .school-name { font-size: 20pt; font-weight: bold; color: #2e59d9; margin: 0; }
+        .school-slogan { font-size: 8pt; font-style: italic; color: #666; }
+        
+        .title { text-align: center; font-size: 14pt; text-transform: uppercase; margin: 10px 0; background: #f8f9fc; padding: 5px; border: 1px solid #e3e6f0; }
+        
+        .info-grid { width: 100%; margin-bottom: 15px; font-size: 10pt; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        th { background-color: #4e73df; color: white; padding: 4px; font-weight: bold; border: 1px solid #2e59d9; font-size: 8pt; }
+        td { border: 1px solid #e3e6f0; padding: 4px; text-align: center; font-size: 9pt; }
+        .text-left { text-align: left; }
+        
+        .summary { width: 40%; margin-left: 60%; margin-bottom: 20px; }
+        .summary-table td { font-weight: bold; padding: 5px; }
+        .summary-title { background: #4e73df; color: white; padding: 5px; text-align: center; font-weight: bold; }
+        
+        .footer { margin-top: 30px; }
+        .signature-box { width: 45%; display: inline-block; vertical-align: top; text-align: center; }
+        .appreciation-row { font-style: italic; font-size: 8pt; color: #555; }
+        .failed { color: #e74a3b; font-weight: bold; }
+        .passed { color: #1cc88a; font-weight: bold; }
+        .bg-light { background-color: #f8f9fc; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>ScolarNextClas</h1>
-        <h2>Bulletin de Notes</h2>
-        <p><strong>Période :</strong> {{ $periode }}</p>
+    <div class="company-header">
+        <h1 class="school-name">SCOLARNEXT</h1>
+        <p class="school-slogan">L'Excellence au Service de l'Éducation</p>
     </div>
 
-    <div class="info">
-        <strong>Nom :</strong> {{ $eleve->nomComplet }}<br>
-        <strong>Matricule :</strong> {{ $eleve->matricule }}<br>
-        <strong>Classe :</strong> {{ $eleve->classe->nom ?? '—' }}
-    </div>
+    <div class="title">BULLETIN DE NOTES - {{ strtoupper($periode) }}</div>
+
+    <table class="info-grid">
+        <tr>
+            <td class="text-left" style="width: 50%; border: none;">
+                <strong>ÉLÈVE :</strong> {{ strtoupper($eleve->nom) }} {{ $eleve->prenom }}<br>
+                <strong>MATRICULE :</strong> {{ $eleve->matricule }}<br>
+                <strong>DATE DE NAISSANCE :</strong> {{ $eleve->date_naissance ? \Carbon\Carbon::parse($eleve->date_naissance)->format('d/m/Y') : 'N/A' }}
+            </td>
+            <td class="text-left" style="width: 50%; border: none;">
+                <strong>CLASSE :</strong> {{ $eleve->classe->nom ?? '—' }}<br>
+                <strong>ANNÉE SCOLAIRE :</strong> 2025-2026<br>
+                <strong>RANG :</strong> {{ $rang['position'] }} / {{ $rang['total'] }}
+            </td>
+        </tr>
+    </table>
 
     <table>
         <thead>
             <tr>
-                <th>Matière</th>
-                <th>Moyenne / 20</th>
-                <th>Coef</th>
-                <th>Points</th>
+                <th class="text-left" rowspan="2">Matières</th>
+                <th colspan="3">Interros</th>
+                <th colspan="2">Devoirs</th>
+                <th rowspan="2">Comp.</th>
+                <th rowspan="2">Moy. T</th>
+                <th rowspan="2">Coef</th>
+                <th rowspan="2">Points</th>
+                <th rowspan="2">Appréciation</th>
+            </tr>
+            <tr>
+                <th>I1</th>
+                <th>I2</th>
+                <th>I3</th>
+                <th>D1</th>
+                <th>D2</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($resultats as $matiere)
+            @foreach($resultats as $res)
             <tr>
-                <td style="text-align: left; padding-left: 10px;">{{ $matiere['matiere'] }}</td>
-                <td>{{ number_format($matiere['moyenne'], 2) }}</td>
-                <td>{{ $matiere['coef'] }}</td>
-                <td>{{ number_format($matiere['points'], 2) }}</td>
+                <td class="text-left"><strong>{{ $res['matiere'] }}</strong></td>
+                <td>{{ number_format($res['interro1'], 1) ?? '-' }}</td>
+                <td>{{ number_format($res['interro2'], 1) ?? '-' }}</td>
+                <td>{{ number_format($res['interro3'], 1) ?? '-' }}</td>
+                <td>{{ number_format($res['devoir1'], 1) ?? '-' }}</td>
+                <td>{{ number_format($res['devoir2'], 1) ?? '-' }}</td>
+                <td class="bg-light">{{ number_format($res['composition'], 1) ?? '-' }}</td>
+                <td class="{{ $res['moyenne'] < 10 ? 'failed' : '' }} fw-bold" style="background: #eee;">{{ number_format($res['moyenne'], 2) }}</td>
+                <td>{{ $res['coef'] }}</td>
+                <td>{{ number_format($res['points'], 2) }}</td>
+                <td class="appreciation-row">{{ $res['appreciation'] }}</td>
             </tr>
             @endforeach
         </tbody>
         <tfoot>
-            <tr style="font-weight: bold; background-color: #e9e9e9;">
-                <td colspan="3" style="text-align: right; padding-right: 10px;">Moyenne Générale</td>
-                <td>{{ number_format($moyenneGenerale, 2) }} / 20</td>
+            <tr style="background-color: #f8f9fc; font-weight: bold;">
+                <td class="text-left" colspan="8">TOTAUX</td>
+                <td>{{ $totalCoef }}</td>
+                <td>{{ number_format($totalPoints, 2) }}</td>
+                <td>-</td>
             </tr>
         </tfoot>
     </table>
 
+    <div class="summary">
+        <div class="summary-title">RÉSULTAT GÉNÉRAL</div>
+        <table class="summary-table">
+            <tr>
+                <td>MOYENNE GÉNÉRALE</td>
+                <td class="{{ $moyenneGenerale < 10 ? 'failed' : 'passed' }}" style="font-size: 14pt;">{{ number_format($moyenneGenerale, 2) }} / 20</td>
+            </tr>
+            <tr>
+                <td>RANG</td>
+                <td>{{ $rang['position'] }} sur {{ $rang['total'] }}</td>
+            </tr>
+            <tr>
+                <td>DÉCISION</td>
+                <td>{{ $moyenneGenerale >= 10 ? 'ADMIS(E)' : 'ÉCHEC' }}</td>
+            </tr>
+        </table>
+    </div>
+
     <div class="footer">
-        <p>Fait à ......................, le {{ date('d/m/Y') }}</p>
-        <p><strong>Le Directeur</strong></p>
-        <br><br><br>
-        <p>Signature</p>
+        <div class="signature-box">
+            <p>Observations du Parent</p>
+            <div style="height: 60px; border-bottom: 1px dotted #ccc;"></div>
+        </div>
+        <div class="signature-box" style="float: right;">
+            <p>Fait le, {{ now()->translatedFormat('d F Y') }}</p>
+            <p>Le Chef d'Établissement</p>
+            <br>
+            <p style="font-weight: bold; margin-top: 30px;">Cachet & Signature</p>
+        </div>
     </div>
 </body>
 </html>

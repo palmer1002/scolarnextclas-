@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Classe;
 use App\Models\Eleve;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EleveController extends Controller
 {
@@ -50,10 +52,12 @@ class EleveController extends Controller
             'date_naissance' => 'required|date',
             'date_inscription' => 'required|date',
             'statut' => 'required|in:actif,inactif,gradué,abandon',
+            'email' => 'nullable|email|unique:eleves,email',
+            'adresse' => 'nullable|string',
         ]);
 
         // Génération automatique du matricule: SNC + Année + Séquence (ex: SNC2026001)
-        $year = date('Y');
+        $year = '2026';
         $prefix = 'SNC' . $year;
         
         // Trouver le dernier matricule de l'année en cours
@@ -73,9 +77,19 @@ class EleveController extends Controller
         // Formater sur 3 chiffres min (ex: 001, 099, 100)
         $validated['matricule'] = $prefix . str_pad($newSequence, 3, '0', STR_PAD_LEFT);
 
+        // Create User record
+        $user = User::create([
+            'name' => $validated['prenom'] . ' ' . $validated['nom'],
+            'email' => $validated['email'] ?? strtolower($validated['matricule']) . '@school.com',
+            'password' => Hash::make($request->password ?? 'password'),
+            'role' => 'eleve',
+        ]);
+
+        $validated['user_id'] = $user->id;
+
         Eleve::create($validated);
 
-        return redirect()->route('eleves.index')->with('success', 'Élève ajouté avec succès. Matricule généré : ' . $validated['matricule']);
+        return redirect()->route('eleves.index')->with('success', 'Élève ajouté avec succès. Matricule : ' . $validated['matricule'] . ' - Compte créé.');
     }
 
     public function show(Eleve $eleve)
@@ -104,16 +118,37 @@ class EleveController extends Controller
             'date_naissance' => 'required|date',
             'date_inscription' => 'required|date',
             'statut' => 'required|in:actif,inactif,gradué,abandon',
+            'email' => 'nullable|email|unique:eleves,email,'.$eleve->id,
+            'adresse' => 'nullable|string',
         ]);
 
         $eleve->update($validated);
+
+        if ($eleve->user) {
+            $eleve->user->update([
+                'name' => $validated['prenom'] . ' ' . $validated['nom'],
+                'email' => $request->email ?? $eleve->user->email,
+            ]);
+        }
 
         return redirect()->route('eleves.index')->with('success', 'Élève mis à jour avec succès.');
     }
 
     public function destroy(Eleve $eleve)
     {
+        if ($eleve->user) {
+            $eleve->user->delete();
+        }
         $eleve->delete();
         return redirect()->route('eleves.index')->with('success', 'Élève supprimé avec succès.');
+    }
+
+    public function profile()
+    {
+        $eleve = Eleve::where('user_id', auth()->id())->with('classe')->first();
+        if (!$eleve) {
+            return redirect()->route('dashboard')->with('error', 'Profil élève non trouvé.');
+        }
+        return view('eleves.show', compact('eleve'));
     }
 }

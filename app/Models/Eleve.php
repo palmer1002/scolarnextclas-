@@ -14,6 +14,7 @@ class Eleve extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'matricule',
         'nom',
         'prenom',
@@ -38,6 +39,11 @@ class Eleve extends Model
     public function notes()
     {
         return $this->hasMany(Note::class);
+    }
+
+    public function presences()
+    {
+        return $this->hasMany(Presence::class);
     }
 
     public function classe()

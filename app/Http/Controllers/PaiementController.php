@@ -67,6 +67,7 @@ class PaiementController extends Controller
             $validated['montant_restant'] = $montant_total;
         }
 
+        $validated['annee_scolaire'] = '2025-2026';
         Paiement::create($validated);
 
         return redirect()->route('paiements.index')->with('success', 'Paiement enregistré avec succès.');
@@ -101,6 +102,7 @@ class PaiementController extends Controller
         $validated['montant'] = $validated['montant_total'];
         $validated['montant_restant'] = $validated['montant_total'] - ($validated['montant_paye'] ?? 0);
 
+        $validated['annee_scolaire'] = '2025-2026';
         $paiement->update($validated);
         
         return redirect()->route('paiements.index')->with('success', 'Paiement mis à jour avec succès.');

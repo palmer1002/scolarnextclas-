@@ -70,8 +70,8 @@
                             <h5 class="mt-4 mb-3 text-secondary border-bottom pb-2">Enseignement & Affectation</h5>
 
                             <div class="col-md-6">
-                                <label for="subject" class="form-label fw-bold">Matière enseignée <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="subject" name="subject" value="{{ old('subject', $enseignant->subject) }}" required>
+                                <label for="subject" class="form-label fw-bold">Spécialité / Titre (optionnel)</label>
+                                <input type="text" class="form-control" id="subject" name="subject" value="{{ old('subject', $enseignant->subject) }}" placeholder="Ex: Professeur de Mathématiques">
                                 @error('subject')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
@@ -84,6 +84,30 @@
                                     <option value="Vacataire" {{ old('status', $enseignant->status) == 'Vacataire' ? 'selected' : '' }}>Vacataire</option>
                                 </select>
                                 @error('status')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Matières assignées</label>
+                                <div class="card bg-light border-0 mb-3">
+                                    <div class="card-body" style="max-height: 150px; overflow-y: auto;">
+                                        <div class="row">
+                                            @foreach($matieres as $matiere)
+                                                <div class="col-md-4 col-sm-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="matieres[]" value="{{ $matiere->id }}" id="matiere_{{ $matiere->id }}" 
+                                                            {{ in_array($matiere->id, old('matieres', $enseignant->matieres->pluck('id')->toArray())) ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="matiere_{{ $matiere->id }}">
+                                                            {{ $matiere->nom }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('matieres')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>

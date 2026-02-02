@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Enseignant;
 use App\Models\User;
 use App\Models\Classe;
+use App\Models\Matiere;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -16,7 +17,7 @@ class EnseignantController extends Controller
      */
     public function index()
     {
-        $enseignants = Enseignant::with('classes')->get();
+        $enseignants = Enseignant::with(['classes', 'matieres'])->get();
         return view('Enseignants.index', compact('enseignants'));
     }
 
@@ -26,7 +27,8 @@ class EnseignantController extends Controller
     public function create()
     {
         $classes = Classe::all();
-        return view('Enseignants.create', compact('classes'));
+        $matieres = Matiere::all();
+        return view('Enseignants.create', compact('classes', 'matieres'));
     }
 
     /**
@@ -38,19 +40,21 @@ class EnseignantController extends Controller
             'title' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'subject' => 'required',
+            'subject' => 'nullable', // Keep for backward compatibility or description
             'email' => 'required|email|unique:enseignants,email',
             'phone' => 'nullable',
             'status' => 'required',
             'classes' => 'nullable|array',
             'classes.*' => 'exists:classes,id',
+            'matieres' => 'nullable|array',
+            'matieres.*' => 'exists:matieres,id',
         ]);
 
         // Create User account for the teacher
         $user = User::create([
             'name' => $validated['first_name'] . ' ' . $validated['last_name'],
             'email' => $validated['email'],
-            'password' => Hash::make('password'), // Default password
+            'password' => Hash::make($request->password ?? 'password'), 
             'role' => 'enseignant',
         ]);
 
@@ -69,6 +73,10 @@ class EnseignantController extends Controller
             $enseignant->classes()->sync($validated['classes']);
         }
 
+        if (isset($validated['matieres'])) {
+            $enseignant->matieres()->sync($validated['matieres']);
+        }
+
         return redirect()->route('enseignants.index')
                          ->with('success', 'Enseignant ajouté avec succès et compte utilisateur créé.');
     }
@@ -78,7 +86,7 @@ class EnseignantController extends Controller
      */
     public function show(Enseignant $enseignant)
     {
-        $enseignant->load('classes');
+        $enseignant->load(['classes', 'matieres']);
         return view('Enseignants.show', compact('enseignant'));
     }
 
@@ -88,7 +96,9 @@ class EnseignantController extends Controller
     public function edit(Enseignant $enseignant)
     {
         $classes = Classe::all();
-        return view('Enseignants.edit', compact('enseignant', 'classes'));
+        $matieres = Matiere::all();
+        $enseignant->load(['classes', 'matieres']);
+        return view('Enseignants.edit', compact('enseignant', 'classes', 'matieres'));
     }
 
     /**
@@ -100,7 +110,7 @@ class EnseignantController extends Controller
             'title' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'subject' => 'required',
+            'subject' => 'nullable',
             'email' => [
                 'required',
                 'email',
@@ -110,6 +120,8 @@ class EnseignantController extends Controller
             'status' => 'required',
             'classes' => 'nullable|array',
             'classes.*' => 'exists:classes,id',
+            'matieres' => 'nullable|array',
+            'matieres.*' => 'exists:matieres,id',
         ]);
 
         $enseignant->update([
@@ -128,6 +140,12 @@ class EnseignantController extends Controller
         } else {
             \Illuminate\Support\Facades\Log::info('Detaching classes for teacher ' . $enseignant->id);
             $enseignant->classes()->detach();
+        }
+
+        if (isset($validated['matieres'])) {
+            $enseignant->matieres()->sync($validated['matieres']);
+        } else {
+            $enseignant->matieres()->detach();
         }
 
         // Update User email if changed
@@ -156,5 +174,14 @@ class EnseignantController extends Controller
 
         return redirect()->route('enseignants.index')
                          ->with('success', 'Enseignant supprimé avec succès.');
+    }
+
+    public function profile()
+    {
+        $enseignant = Enseignant::where('user_id', auth()->id())->with(['classes', 'matieres'])->first();
+        if (!$enseignant) {
+            return redirect()->route('dashboard')->with('error', 'Profil enseignant non trouvé.');
+        }
+        return view('Enseignants.show', compact('enseignant'));
     }
 }

@@ -8,47 +8,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #2313d4 0%, #7d6ae8 100%);
+            background: #f4f4f4;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .password-reset-container {
-            background: white;
+            background: #fff;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             padding: 40px;
             width: 100%;
             max-width: 450px;
-        }
-        .logo {
+            margin: 40px auto;
             text-align: center;
-            margin-bottom: 30px;
         }
-        .logo span {
-            background: #170B9D;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
+
+        h2 {
+            color: #170B9D;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
+
         .form-control {
             padding: 12px 15px;
             border-radius: 8px;
             border: 1px solid #ddd;
             margin-bottom: 20px;
         }
+
         .form-control:focus {
             border-color: #170B9D;
             box-shadow: 0 0 0 0.2rem rgba(23, 11, 157, 0.25);
         }
+
         .btn-reset {
             background: #170B9D;
             color: white;
@@ -60,60 +56,53 @@
             font-weight: 600;
             transition: all 0.3s;
         }
+
         .btn-reset:hover {
             background: #120890;
             transform: translateY(-2px);
         }
+
         .alert {
             border-radius: 8px;
+            text-align: left;
         }
+
         .back-to-login {
-            text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
         }
+
         .back-to-login a {
             color: #170B9D;
             text-decoration: none;
+            font-weight: 500;
         }
+
         .back-to-login a:hover {
             text-decoration: underline;
         }
-
-        .password-reset-container {
-    width: 350px;
-    margin: 80px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    text-align: center; /* centre tout le contenu */
-}
-
-.logo img {
-    width: 90px;   /* taille du logo */
-    height: 90px;
-    margin-bottom: 15px; /* espace entre logo et titre */
-}
-
     </style>
 </head>
 <body>
-    <div class="password-reset-container"> <div class="logo"> <img src="{{ asset('images/logo.png') }}" alt="Logo ScolarNextClas"> </div>
-            <h2>ScolarNextClas</h2>
-            <p class="text-muted">Réinitialisation du mot de passe</p>
+    <div class="password-reset-container">
+        <div class="logo d-flex align-items-center justify-content-center mb-3">
+            @include('partials.login-logo', ['class' => 'me-3', 'width' => '70px', 'height' => '70px'])
+            <div class="text-start">
+                <h2 style="margin:0;color:#170B9D;font-weight: 800;font-size: 1.8rem;letter-spacing: -1px;">ScolarNextClas</h2>
+            </div>
         </div>
+        <p class="text-muted mb-4">Réinitialisation du mot de passe</p>
 
         @if(session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
+            <div class="alert alert-success mt-3 shadow-sm">
+                <i class="fas fa-check-circle me-1"></i> {{ session('status') }}
             </div>
         @endif
 
         @if($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger mt-3 shadow-sm">
                 <ul class="mb-0">
                     @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                        <li><i class="fas fa-exclamation-circle me-1"></i> {{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -121,19 +110,20 @@
 
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
+            <div class="mb-3 text-start">
+                <label for="email" class="form-label">Votre adresse email</label>
                 <input type="email" class="form-control" id="email" name="email" 
-                       value="{{ old('email') }}" required autofocus>
+                       value="{{ old('email') }}" required autofocus placeholder="exemple@ecole.com">
+                <div class="form-text small">Un lien de réinitialisation vous sera envoyé par email.</div>
             </div>
-            <button type="submit" class="btn btn-reset">
-                <i class="fas fa-paper-plane"></i> Envoyer le lien de réinitialisation
+            <button type="submit" class="btn btn-reset mt-3">
+                <i class="fas fa-paper-plane me-1"></i> Envoyer le lien
             </button>
         </form>
 
         <div class="back-to-login">
             <a href="{{ route('login') }}">
-                <i class="fas fa-arrow-left"></i> Retour à la connexion
+                <i class="fas fa-arrow-left me-1"></i> Retour à la connexion
             </a>
         </div>
     </div>

@@ -131,11 +131,11 @@
                                                            class="btn btn-outline-primary" title="Voir profil">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
-                                                        <a href="{{ route('notes.index') }}" 
+                                                        <a href="{{ route('notes.index', ['eleve_id' => $enfant_stat['eleve']->id]) }}" 
                                                            class="btn btn-outline-success" title="Voir notes">
                                                             <i class="fas fa-clipboard-list"></i>
                                                         </a>
-                                                        <a href="{{ route('bulletins.index') }}" 
+                                                        <a href="{{ route('bulletins.index', ['eleve_id' => $enfant_stat['eleve']->id]) }}" 
                                                            class="btn btn-outline-warning" title="Voir bulletins">
                                                             <i class="fas fa-file-invoice"></i>
                                                         </a>

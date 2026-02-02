@@ -9,17 +9,51 @@
                     <h5 class="mb-0">Générer un Bulletin</h5>
                 </div>
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ route('bulletins.store') }}" method="POST">
                         @csrf
                         
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Élève</label>
-                            <select name="eleve_id" class="form-select select2" required>
-                                <option value="">Sélectionner un élève</option>
-                                @foreach($eleves as $eleve)
-                                    <option value="{{ $eleve->id }}">{{ $eleve->nomComplet }} ({{ $eleve->matricule }})</option>
-                                @endforeach
-                            </select>
+                        <ul class="nav nav-tabs mb-4" id="bulletinType" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single" type="button" role="tab" aria-controls="single" aria-selected="true">Par Élève</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="class-tab" data-bs-toggle="tab" data-bs-target="#class" type="button" role="tab" aria-controls="class" aria-selected="false">Par Classe</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="bulletinTypeContent">
+                            <div class="tab-pane fade show active" id="single" role="tabpanel" aria-labelledby="single-tab">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Élève</label>
+                                    <select name="eleve_id" class="form-select select2">
+                                        <option value="">Sélectionner un élève</option>
+                                        @foreach($eleves as $eleve)
+                                            <option value="{{ $eleve->id }}">{{ $eleve->nomComplet }} ({{ $eleve->matricule }})</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="class" role="tabpanel" aria-labelledby="class-tab">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Classe</label>
+                                    <select name="classe_id" class="form-select select2">
+                                        <option value="">Sélectionner une classe</option>
+                                        @foreach($classes as $classe)
+                                            <option value="{{ $classe->id }}">{{ $classe->nom }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row mb-3">
@@ -40,10 +74,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Année Scolaire</label>
-                            <input type="text" name="annee_scolaire" class="form-control" placeholder="ex: 2025-2026" required value="{{ date('Y') . '-' . (date('Y') + 1) }}">
-                        </div>
+
 
                         <div class="d-flex justify-content-end gap-2">
                             <a href="{{ route('bulletins.index') }}" class="btn btn-light">Annuler</a>

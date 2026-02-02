@@ -21,29 +21,39 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            
-            // Redirect based on user role
-            $user = Auth::user();
-            
-            switch ($user->role) {
-                case 'admin':
-                    return redirect()->route('dashboard.admin');
-                case 'enseignant':
-                    return redirect()->route('dashboard.enseignant');
-                case 'parent':
-                    return redirect()->route('dashboard.parent');
-                case 'eleve':
-                    return redirect()->route('dashboard.eleve');
-                default:
-                    return redirect()->route('dashboard');
-            }
+        // Vérifier si l'email existe
+        $user = \App\Models\User::where('email', $credentials['email'])->first();
+        
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'Aucun compte n\'existe avec cette adresse email.',
+            ])->onlyInput('email');
         }
 
-        return back()->withErrors([
-            'email' => 'Les identifiants ne correspondent pas.',
-        ])->onlyInput('email');
+        // Vérifier le mot de passe
+        if (!Auth::attempt($credentials)) {
+            return back()->withErrors([
+                'password' => 'Le mot de passe est incorrect.',
+            ])->onlyInput('email');
+        }
+
+        $request->session()->regenerate();
+        
+        // Redirect based on user role
+        $user = Auth::user();
+        
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->route('dashboard.admin');
+            case 'enseignant':
+                return redirect()->route('dashboard.enseignant');
+            case 'parent':
+                return redirect()->route('dashboard.parent');
+            case 'eleve':
+                return redirect()->route('dashboard.eleve');
+            default:
+                return redirect()->route('dashboard');
+        }
     }
 
     // Déconnexion

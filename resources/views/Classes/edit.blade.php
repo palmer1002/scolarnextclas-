@@ -44,13 +44,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Année Scolaire</label>
-                                <input type="number" name="annee_scolaire" class="form-control @error('annee_scolaire') is-invalid @enderror" value="{{ old('annee_scolaire', $class->annee_scolaire) }}" required>
-                                @error('annee_scolaire')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+
                         </div>
 
                         <div class="mb-3">

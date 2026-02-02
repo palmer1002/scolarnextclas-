@@ -41,22 +41,40 @@
                             </ul>
                         </div>
 
-                        <div class="col-md-6">
-                            <h5 class="text-secondary border-bottom pb-2 mb-3">Classes Assignées</h5>
-                            @if($enseignant->classes->count() > 0)
-                                <div class="d-flex flex-wrap gap-2">
-                                    @foreach($enseignant->classes as $classe)
-                                        <span class="badge bg-primary fs-6">{{ $classe->nom }}</span>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="alert alert-info py-2">
-                                    <i class="fas fa-info-circle me-1"></i> Aucune classe assignée.
-                                </div>
-                            @endif
+                        <div class="col-8">
+                             <h5 class="text-secondary border-bottom pb-2 mb-3">Compétences & Affectations</h5>
+                             
+                             <div class="mb-4">
+                                 <h6 class="fw-bold text-muted mb-2 small uppercase">Matières Enseignées</h6>
+                                 @if($enseignant->matieres->count() > 0)
+                                     <div class="d-flex flex-wrap gap-2">
+                                         @foreach($enseignant->matieres as $matiere)
+                                             <span class="badge bg-success fs-6">{{ $matiere->nom }}</span>
+                                         @endforeach
+                                     </div>
+                                 @else
+                                     <div class="text-muted italic small"><i class="fas fa-info-circle me-1"></i> Aucune matière spécifique enregistrée.</div>
+                                 @endif
+                             </div>
+
+                             <div>
+                                 <h6 class="fw-bold text-muted mb-2 small uppercase">Classes Assignées</h6>
+                                 @if($enseignant->classes->count() > 0)
+                                     <div class="d-flex flex-wrap gap-2">
+                                         @foreach($enseignant->classes as $classe)
+                                             <span class="badge bg-primary fs-6">{{ $classe->nom }}</span>
+                                         @endforeach
+                                     </div>
+                                 @else
+                                     <div class="alert alert-info py-2">
+                                         <i class="fas fa-info-circle me-1"></i> Aucune classe assignée.
+                                     </div>
+                                 @endif
+                             </div>
                         </div>
                     </div>
                     
+                    @if(Auth::user()->role === 'admin')
                     <div class="d-flex justify-content-end mt-4 pt-3 border-top gap-2">
                         <a href="{{ route('enseignants.edit', $enseignant->id) }}" class="btn btn-warning">
                             <i class="fas fa-edit me-1"></i> Modifier
@@ -69,6 +87,7 @@
                             </button>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

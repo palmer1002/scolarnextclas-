@@ -24,9 +24,9 @@ class ClasseController extends Controller
             'nom' => 'required|string|max:255',
             'niveau' => 'required|string|max:255',
             'capacite_max' => 'required|integer|min:1',
-            'annee_scolaire' => 'required|integer',
         ]);
 
+        $validated['annee_scolaire'] = '2025-2026';
         Classe::create($validated);
 
         return redirect()->route('classes.index')->with('success', 'Classe créée avec succès.');
@@ -49,9 +49,9 @@ class ClasseController extends Controller
             'nom' => 'required|string|max:255',
             'niveau' => 'required|string|max:255',
             'capacite_max' => 'required|integer|min:1',
-            'annee_scolaire' => 'required|integer',
         ]);
 
+        $validated['annee_scolaire'] = '2025-2026';
         $class->update($validated);
 
         return redirect()->route('classes.index')->with('success', 'Classe mise à jour avec succès.');

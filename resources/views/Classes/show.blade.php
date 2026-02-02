@@ -41,10 +41,7 @@
                             <span class="text-muted"><i class="fas fa-users me-2"></i> Capacité</span>
                             <span class="fw-bold text-primary">{{ $class->capacite_max }} places</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <span class="text-muted"><i class="fas fa-calendar-alt me-2"></i> Année Scolaire</span>
-                            <span class="fw-bold">{{ $class->annee_scolaire }}</span>
-                        </li>
+
                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                             <span class="text-muted"><i class="fas fa-info-circle me-2"></i> Statut</span>
                             <span class="badge {{ $class->statut ? 'bg-success' : 'bg-danger' }}">

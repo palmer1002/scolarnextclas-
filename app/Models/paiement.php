@@ -191,9 +191,7 @@ class Paiement extends Model
             $type .= " - {$this->periode_libelle}";
         }
         
-        if ($this->annee_scolaire) {
-            $type .= " ({$this->annee_scolaire})";
-        }
+
         
         return $type;
     }
@@ -402,7 +400,7 @@ class Paiement extends Model
      */
     public static function genererNumeroRecu(): string
     {
-        $prefix = 'RECU-' . date('Y') . '-';
+        $prefix = 'RECU-' . '2026' . '-';
         $dernier = self::where('numero_recu', 'like', $prefix . '%')
                       ->orderBy('numero_recu', 'desc')
                       ->first();

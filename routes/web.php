@@ -10,7 +10,7 @@ use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserAccessController;
 use App\Http\Controllers\PresenceController;
-use App\Http\Controllers\EmploiDuTempsController;
+// use App\Http\Controllers\EmploiDuTempsController;
 use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\AlerteController;
 use App\Http\Controllers\DashboardController;
@@ -30,6 +30,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout']);
 
 // 🔹 Password Reset
 Route::get('/password/reset', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
@@ -37,19 +38,14 @@ Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEm
 Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
 
-// 🔹 Dashboard Redirection
-Route::get('/', function () {
-    if (auth()->check()) {
-        return match(auth()->user()->role) {
-            'admin' => redirect()->route('dashboard.admin'),
-            'enseignant' => redirect()->route('dashboard.enseignant'),
-            'parent' => redirect()->route('dashboard.parent'),
-            'eleve' => redirect()->route('dashboard.eleve'),
-            default => redirect()->route('dashboard')
-        };
-    }
-    return view('Dashboard.index');
-})->name('dashboard');
+// 🔹 Dashboard Redirection & Data
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index']);
+
+// 🔹 Legal Pages
+Route::get('/politique-de-confidentialite', function () {
+    return view('legal.privacy');
+})->name('privacy');
 
 // 🔹 Main Authenticated Routes
 Route::middleware(['auth'])->group(function () {
@@ -64,7 +60,13 @@ Route::middleware(['auth'])->group(function () {
     // Notes
     Route::get('/notes', [NoteController::class, 'index'])->name('notes.index');
     Route::get('/notes/create', [NoteController::class, 'create'])->name('notes.create');
+    Route::get('/notes/batch', [NoteController::class, 'createBatch'])->name('notes.batch');
+    Route::post('/notes/batch', [NoteController::class, 'storeBatch'])->name('notes.batch.store');
     Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
+    Route::get('/notes/{note}', [NoteController::class, 'show'])->name('notes.show');
+    Route::get('/notes/{note}/edit', [NoteController::class, 'edit'])->name('notes.edit');
+    Route::put('/notes/{note}', [NoteController::class, 'update'])->name('notes.update');
+    Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
 
     // Présences
     Route::get('/presences', [PresenceController::class, 'index'])->name('presences.index');
@@ -74,12 +76,15 @@ Route::middleware(['auth'])->group(function () {
 
     // Bulletins (PDF, Calcul)
     Route::get('/bulletins', [BulletinController::class, 'index'])->name('bulletins.index');
+    Route::get('/bulletins/summary', [BulletinController::class, 'classSummary'])->name('bulletins.summary');
     Route::get('/bulletins/{eleve}/{periode}', [BulletinController::class, 'show'])->name('bulletins.show');
     Route::get('/bulletins/{eleve}/{periode}/pdf', [BulletinController::class, 'exportPdf'])->name('bulletins.exportPdf');
+    Route::get('/bulletins-batch/pdf', [BulletinController::class, 'exportClassPdf'])->name('bulletins.exportClassPdf');
+    Route::delete('/bulletins/{bulletin}', [BulletinController::class, 'destroy'])->name('bulletins.destroy')->middleware('role:admin,secretaire');
     
-    // Emplois du temps
-    Route::get('/emplois-du-temps', [EmploiDuTempsController::class, 'index'])->name('emplois.index');
-    Route::middleware('role:admin')->post('/emplois-du-temps', [EmploiDuTempsController::class, 'store'])->name('emplois.store');
+    // Emplois du temps (Désactivé)
+    // Route::get('/emplois-du-temps', [EmploiDuTempsController::class, 'index'])->name('emplois.index');
+    // Route::middleware('role:admin')->post('/emplois-du-temps', [EmploiDuTempsController::class, 'store'])->name('emplois.store');
 
     // Événements
     Route::get('/evenements', [EvenementController::class, 'index'])->name('evenements.index');
@@ -95,9 +100,22 @@ Route::middleware(['auth'])->group(function () {
     // Classes
     Route::resource('classes', ClasseController::class);
 
+    // Annonces
+    Route::resource('annonces', \App\Http\Controllers\AnnonceController::class);
+
+    // Messagerie
+    Route::get('/messages', [\App\Http\Controllers\MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{user}', [\App\Http\Controllers\MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages', [\App\Http\Controllers\MessageController::class, 'store'])->name('messages.store');
+
     // Paiements
     Route::get('/paiements/{paiement}/download', [\App\Http\Controllers\PaiementController::class, 'downloadReceipt'])->name('paiements.download');
     Route::resource('paiements', \App\Http\Controllers\PaiementController::class);
+
+    // Profile Access for all roles
+    Route::get('/mon-profil/eleve', [EleveController::class, 'profile'])->name('eleves.profile');
+    Route::get('/mon-profil/enseignant', [EnseignantController::class, 'profile'])->name('enseignants.profile');
+    Route::get('/mon-profil/parent', [ParentController::class, 'profile'])->name('parents.profile');
 });
 
 // 🔹 Admin Specific Routes

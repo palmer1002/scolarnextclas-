@@ -95,19 +95,23 @@
                                 <input type="text" class="form-control" id="adresse" name="adresse" value="{{ old('adresse') }}">
                             </div>
 
+                            <h5 class="mt-4 mb-3 text-secondary border-bottom pb-2">Informations de Connexion</h5>
                             <div class="col-md-6">
-                                <label for="email" class="form-label">Email Élève (optionnel)</label>
-                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
+                                <label for="email" class="form-label fw-bold">Email (Login) <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Ex: eleve@school.com" required>
+                                <div class="form-text">Cet email servira d'identifiant pour se connecter.</div>
                                 @error('email')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="col-md-6">
-                                <label for="telephone" class="form-label">Téléphone Élève (optionnel)</label>
-                                <input type="tel" class="form-control" id="telephone" name="telephone" value="{{ old('telephone') }}">
+                                <label for="password" class="form-label fw-bold">Mot de passe <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="password" name="password" value="{{ old('password', 'password') }}" required>
+                                <div class="form-text">Par défaut : "password". L'élève pourra le modifier.</div>
+                                @error('password')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
-
 
                             <h5 class="mt-4 mb-3 text-secondary border-bottom pb-2">Informations du Parent / Tuteur</h5>
 

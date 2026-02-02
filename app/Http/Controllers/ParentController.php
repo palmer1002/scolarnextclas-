@@ -50,7 +50,7 @@ class ParentController extends Controller
         $user = User::create([
             'name' => $validated['nom_complet'],
             'email' => $validated['email'] ?? 'parent'.time().'@school.com',
-            'password' => Hash::make('password'), 
+            'password' => Hash::make($request->password ?? 'password'), 
             'role' => 'parent',
         ]);
 
@@ -146,5 +146,14 @@ class ParentController extends Controller
 
         return redirect()->route('parents.index')
             ->with('success', 'Parent supprimé avec succès.');
+    }
+
+    public function profile()
+    {
+        $parent = Parents::where('user_id', auth()->id())->with('students')->first();
+        if (!$parent) {
+            return redirect()->route('dashboard')->with('error', 'Profil parent non trouvé.');
+        }
+        return view('Parents.show', compact('parent'));
     }
 }

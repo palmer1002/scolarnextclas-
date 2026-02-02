@@ -14,6 +14,8 @@ class Note extends Model
         'matiere_id',
         'type_periode',
         'numero_periode',
+        'type_evaluation',
+        'num_evaluation',
         'note',
         'coefficient',
         'annee_scolaire',

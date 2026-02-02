@@ -7,7 +7,8 @@
     <div class="row">
         <div class="col-md-12">
             <h1 class="mb-3"><i class="fas fa-chalkboard-teacher me-2 text-primary"></i> Bienvenue, {{ Auth::user()->name }}</h1>
-            <p class="lead text-muted">Tableau de bord Enseignant - Année {{ date('Y') }}-{{ date('Y') + 1 }}</p>
+            <p class="lead text-muted">Tableau de bord Enseignant</p>
+
             
             @if(session('warning'))
                 <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">

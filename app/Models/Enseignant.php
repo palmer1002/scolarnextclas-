@@ -30,6 +30,11 @@ class Enseignant extends Model
         return $this->belongsToMany(Classe::class, 'classe_enseignant');
     }
 
+    public function matieres()
+    {
+        return $this->belongsToMany(Matiere::class, 'enseignant_matiere');
+    }
+
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

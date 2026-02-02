@@ -28,7 +28,7 @@
                             <th>Niveau</th>
                             <th>Capacité</th>
                             <th>Élèves inscrits</th>
-                            <th>Année Scolaire</th>
+
                             <th class="text-end pe-4">Actions</th>
                         </tr>
                     </thead>
@@ -49,7 +49,7 @@
                                         <small>{{ $classe->eleves_count }}</small>
                                     </div>
                                 </td>
-                                <td>{{ $classe->annee_scolaire }}</td>
+
                                 <td class="text-end pe-4">
                                     <div class="btn-group btn-group-sm shadow-sm">
                                         <a href="{{ route('classes.show', $classe->id) }}" class="btn btn-outline-info" title="Détails">

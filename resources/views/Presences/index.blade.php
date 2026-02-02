@@ -65,8 +65,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label>Élève ID</label>
-                        <input type="number" name="eleve_id" class="form-control" required>
+                        <label class="form-label">Élève</label>
+                        <select name="eleve_id" class="form-select" required>
+                            <option value="">-- Choisir un élève --</option>
+                            @foreach($eleves as $eleve)
+                                <option value="{{ $eleve->id }}">{{ $eleve->nom }} {{ $eleve->prenom }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label>Date</label>

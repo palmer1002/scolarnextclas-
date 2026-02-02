@@ -9,9 +9,6 @@
             <p>Administrez les informations des parents et tuteurs des élèves</p>
         </div>
         <div style="display: flex; gap: 15px;">
-            <span style="padding: 5px 15px; border: 1px solid #ddd; background: #f0f0f0; font-size: 0.9rem; cursor: pointer;">
-                Année 2025-2026
-            </span>
         </div>
     </div>
 

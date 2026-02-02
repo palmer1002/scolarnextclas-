@@ -43,7 +43,6 @@
             padding: 12px 15px;
             border-radius: 8px;
             border: 1px solid #ddd;
-            margin-bottom: 20px;
         }
 
         .form-control:focus {
@@ -85,25 +84,47 @@
 <body>
     <div class="login-container">
         <div class="logo d-flex align-items-center justify-content-center mb-3">
-            @include('partials.login-logo', ['class' => 'me-3'])
+            @include('partials.login-logo', ['class' => 'me-3', 'width' => '80px', 'height' => '80px'])
             <div class="text-start">
-                <h2 style="margin:0;color:#170B9D;">ScolarNextClas</h2>
-              
+                <h2 style="margin:0;color:#170B9D;font-weight: 800;font-size: 2.2rem;letter-spacing: -1.5px;">ScolarNextClas</h2>
             </div>
         </div>
         <p class="text-muted">Plateforme de Gestion Scolaire</p>
+
+        @if (session('status'))
+            <div class="alert alert-success mt-3 shadow-sm">
+                <i class="fas fa-check-circle me-1"></i> {{ session('status') }}
+            </div>
+        @endif
 
         <div id="error-message" class="alert alert-danger" style="display: none;"></div>
 
         <form method="POST" action="/login" id="login-form">
             @csrf
-            <div class="mb-3 text-start">
+            <div class="mb-4 text-start">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required autofocus>
+                <input type="email" class="form-control mb-0 @error('email') is-invalid @enderror" 
+                       id="email" name="email" value="{{ old('email') }}" required autofocus placeholder="votre@email.com">
+                @error('email')
+                    <div class="invalid-feedback d-block">
+                        <i class="fas fa-exclamation-circle me-1"></i> {{ $message }}
+                    </div>
+                @enderror
             </div>
-            <div class="mb-3 text-start">
+            <div class="mb-4 text-start">
                 <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <div class="input-group">
+                    <input type="password" class="form-control mb-0 @error('password') is-invalid @enderror" 
+                           id="password" name="password" required placeholder="••••••••">
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword" style="border-radius: 0 8px 8px 0; border: 1px solid #ddd; border-left: none; background: #fff;">
+                        <i class="fas fa-eye" id="eyeIcon" style="color: #666;"></i>
+                    </button>
+                </div>
+                @error('password')
+                    <div class="invalid-feedback d-block">
+                        <i class="fas fa-exclamation-circle me-1"></i> {{ $message }}
+                    </div>
+                @enderror
             </div>
             <button type="submit" class="btn btn-login">
                 <i class="fas fa-sign-in-alt"></i> Se connecter
@@ -111,21 +132,36 @@
         </form>
         
         <div class="text-center mt-3">
-            <a href="/forgot-password" class="text-muted">
+            <a href="{{ route('password.request') }}" class="text-muted">
                 <small>Mot de passe oublié ?</small>
             </a>
         </div>
 
         <div class="text-center mt-4">
-            <p class="text-muted">Année scolaire 2025-2026</p>
+
+            <a href="{{ route('privacy') }}" class="text-muted"><small>Politique de confidentialité</small></a>
         </div>
     </div>
 
     <script>
+        // Toggle Password visibility
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        const eyeIcon = document.querySelector('#eyeIcon');
+
+        togglePassword.addEventListener('click', function (e) {
+            // toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            // toggle the eye icon
+            eyeIcon.classList.toggle('fa-eye');
+            eyeIcon.classList.toggle('fa-eye-slash');
+        });
+
         // Gestion basique du formulaire
         document.getElementById('login-form').addEventListener('submit', function(e) {
             const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const passwordVal = document.getElementById('password').value;
             const errorDiv = document.getElementById('error-message');
             
             // Réinitialiser les erreurs
@@ -133,14 +169,12 @@
             errorDiv.textContent = '';
             
             // Validation basique
-            if (!email || !password) {
-                e.preventDefault(); // Prevent submission only if validation fails
+            if (!email || !passwordVal) {
+                e.preventDefault(); 
                 errorDiv.textContent = 'Veuillez remplir tous les champs.';
                 errorDiv.style.display = 'block';
                 return;
             }
-            
-            // Allow normal form submission if validation passes
         });
     </script>
 </body>

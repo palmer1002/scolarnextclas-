@@ -58,11 +58,36 @@
                                 <div class="list-group">
                                     @foreach($parent->students as $student)
                                         <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <i class="fas fa-user-graduate me-2 text-primary"></i>
-                                                {{ $student->nom }} {{ $student->prenom }}
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <div>
+                                                    <i class="fas fa-user-graduate me-2 text-primary"></i>
+                                                    <strong>{{ $student->nom }} {{ $student->prenom }}</strong>
+                                                    <br>
+                                                    <small class="text-muted ms-4">Matricule: {{ $student->matricule }}</small>
+                                                </div>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                        Actions
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('notes.index') }}">
+                                                                <i class="fas fa-star me-2 text-warning"></i> Voir Notes
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('presences.index') }}">
+                                                                <i class="fas fa-clock me-2 text-info"></i> Voir Présences
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('bulletins.index') }}">
+                                                                <i class="fas fa-file-alt me-2 text-success"></i> Bulletins
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                            <span class="badge bg-light text-dark border">{{ $student->matricule }}</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -83,6 +108,7 @@
                         @endif
                     </div>
                     
+                    @if(Auth::user()->role === 'admin')
                     <div class="d-flex justify-content-end mt-4 pt-3 border-top gap-2">
                         <a href="{{ route('parents.edit', $parent->id) }}" class="btn btn-warning">
                             <i class="fas fa-edit me-1"></i> Modifier
@@ -95,6 +121,7 @@
                             </button>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

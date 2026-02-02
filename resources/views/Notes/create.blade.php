@@ -107,18 +107,32 @@
             </div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Année scolaire</label>
-            <input type="text"
-                   name="annee_scolaire"
-                   class="form-control @error('annee_scolaire') is-invalid @enderror"
-                   placeholder="Ex: 2025-2026"
-                   value="{{ old('annee_scolaire') }}"
-                   required>
-            @error('annee_scolaire')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Type d'Évaluation</label>
+                <select name="type_evaluation" class="form-control @error('type_evaluation') is-invalid @enderror" required>
+                    <option value="Interrogation" {{ old('type_evaluation') == 'Interrogation' ? 'selected' : '' }}>Interrogation</option>
+                    <option value="Devoir" {{ old('type_evaluation') == 'Devoir' ? 'selected' : '' }}>Devoir</option>
+                    <option value="Composition" {{ old('type_evaluation') == 'Composition' ? 'selected' : '' }}>Composition</option>
+                </select>
+                @error('type_evaluation')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Numéro de l'Évaluation</label>
+                <select name="num_evaluation" class="form-control @error('num_evaluation') is-invalid @enderror" required>
+                    <option value="1" {{ old('num_evaluation') == 1 ? 'selected' : '' }}>N° 1</option>
+                    <option value="2" {{ old('num_evaluation') == 2 ? 'selected' : '' }}>N° 2</option>
+                    <option value="3" {{ old('num_evaluation') == 3 ? 'selected' : '' }}>N° 3</option>
+                </select>
+                @error('num_evaluation')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
         </div>
+
+
 
         <div class="d-flex gap-2">
             <button type="submit" class="btn btn-success">

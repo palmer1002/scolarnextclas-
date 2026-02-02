@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ScolarNextClas')</title>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,16 +15,17 @@
 
     <style>
         .sidebar {
-            width: 250px;
-            background-color: #170B9DFF;
+            width: 280px;
+            background-color: #170B9D;
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
             padding: 20px 0;
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             z-index: 1000;
+            overflow-y: auto; /* Permet le scroll sur petits écrans */
         }
         .sidebar .logo {
             display: flex;
@@ -30,47 +33,47 @@
             margin-bottom: 30px;
             padding: 0 20px;
         }
-        .sidebar .logo span {
-            background: #ff6b6b;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-            font-weight: bold;
-            color: white;
-        }
         .sidebar .logo h3 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
             color: white;
+            line-height: 1.2;
+            white-space: nowrap;
         }
         .content {
-            margin-left: 250px;
+            margin-left: 280px;
             padding: 20px;
             background-color: #f5f5f5;
             min-height: 100vh;
         }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        /* Mobile adjustment */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .content {
+                margin-left: 0;
+            }
         }
-        .sidebar li {
-            padding: 15px 20px;
-        }
-        .sidebar li.active {
-            background-color: #7d6ae8;
-        }
-        .sidebar li a {
-            color: white;
-            text-decoration: none;
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            padding: 10px 20px;
             display: flex;
             align-items: center;
+            transition: all 0.3s;
         }
-        .sidebar li a i {
+        .nav-link:hover, .nav-item.active .nav-link {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-left: 4px solid #ff6b6b;
+            padding-left: 16px; 
+        }
+        .nav-link i {
             margin-right: 10px;
             width: 20px;
             text-align: center;
@@ -82,8 +85,10 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <span>$</span>
-            <h3>ScolarNextClas</h3>
+            @include('partials.login-logo', ['class' => 'me-2', 'width' => '40px', 'height' => '40px'])
+            <div>
+                <h3 class="mb-0">ScolarNextClas</h3>
+            </div>
         </div>
 
         {{-- Menu dynamique --}}

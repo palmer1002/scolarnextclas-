@@ -10,7 +10,7 @@ class EleveFactory extends Factory
     public function definition()
     {
         return [
-            'matricule' => 'SNC' . date('Y') . str_pad($this->faker->unique()->numberBetween(1, 999), 4, '0', STR_PAD_LEFT),
+            'matricule' => 'SNC' . '2026' . str_pad($this->faker->unique()->numberBetween(1, 999), 4, '0', STR_PAD_LEFT),
             'nom' => $this->faker->lastName(),
             'prenom' => $this->faker->firstName(),
             'genre' => $this->faker->randomElement(['Masculin', 'Féminin']),

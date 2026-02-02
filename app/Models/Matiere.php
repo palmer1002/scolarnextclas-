@@ -19,4 +19,9 @@ class Matiere extends Model
     {
         return $this->hasMany(Note::class);
     }
+
+    public function enseignants()
+    {
+        return $this->belongsToMany(Enseignant::class, 'enseignant_matiere');
+    }
 }

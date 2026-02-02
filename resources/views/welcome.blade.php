@@ -31,7 +31,7 @@
                             Dashboard
                         </a>
                     @else
-                        @include('partials.login-logo', ['class' => 'inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal'])
+                        @include('partials.login-logo', ['class' => 'inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal', 'width' => '50px', 'height' => '50px'])
 
                         @if (Route::has('register'))
                             <a

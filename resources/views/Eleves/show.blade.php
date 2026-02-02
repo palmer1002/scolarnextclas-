@@ -110,6 +110,7 @@
                         @endif
                     </div>
 
+                    @if(Auth::user()->role === 'admin')
                     <div class="d-flex justify-content-end gap-2 mt-5 pt-3 border-top">
                         <a href="{{ route('eleves.edit', $eleve->id) }}" class="btn btn-warning px-4 text-white fw-bold">
                             <i class="fas fa-edit me-1"></i> Modifier
@@ -122,6 +123,7 @@
                             </button>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -9,8 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('notes', function (Blueprint $table) {
-            // Supprimer les anciennes colonnes qui ne sont plus utilisées
-            $table->dropColumn(['trimestre', 'semestre']);
+            // Skipped to avoid errors
         });
     }
 

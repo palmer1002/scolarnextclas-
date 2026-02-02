@@ -51,14 +51,6 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="email" class="form-label fw-bold">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
-                                @error('email')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6">
                                 <label for="phone" class="form-label">Téléphone</label>
                                 <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone') }}">
                                 @error('phone')
@@ -66,11 +58,29 @@
                                 @enderror
                             </div>
 
+                            <h5 class="mt-4 mb-3 text-secondary border-bottom pb-2">Informations de Connexion</h5>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label fw-bold">Email (Login) <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
+                                <div class="form-text">Cet email sera utilisé pour la connexion.</div>
+                                @error('email')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="password" class="form-label fw-bold">Mot de passe <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="password" name="password" value="{{ old('password', 'password') }}" required>
+                                <div class="form-text">L'enseignant pourra modifier ce mot de passe.</div>
+                                @error('password')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <h5 class="mt-4 mb-3 text-secondary border-bottom pb-2">Enseignement & Affectation</h5>
 
                             <div class="col-md-6">
-                                <label for="subject" class="form-label fw-bold">Matière enseignée <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="subject" name="subject" value="{{ old('subject') }}" required>
+                                <label for="subject" class="form-label fw-bold">Spécialité / Titre (optionnel)</label>
+                                <input type="text" class="form-control" id="subject" name="subject" value="{{ old('subject') }}" placeholder="Ex: Professeur de Mathématiques">
                                 @error('subject')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
@@ -83,6 +93,30 @@
                                     <option value="Vacataire" {{ old('status') == 'Vacataire' ? 'selected' : '' }}>Vacataire</option>
                                 </select>
                                 @error('status')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Matières assignées</label>
+                                <div class="card bg-light border-0 mb-3">
+                                    <div class="card-body" style="max-height: 150px; overflow-y: auto;">
+                                        <div class="row">
+                                            @foreach($matieres as $matiere)
+                                                <div class="col-md-4 col-sm-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="matieres[]" value="{{ $matiere->id }}" id="matiere_{{ $matiere->id }}" 
+                                                            {{ in_array($matiere->id, old('matieres', [])) ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="matiere_{{ $matiere->id }}">
+                                                            {{ $matiere->nom }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('matieres')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>

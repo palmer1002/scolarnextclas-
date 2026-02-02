@@ -38,17 +38,27 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
-                                @error('email')
+                                <label for="profession" class="form-label">Profession</label>
+                                <input type="text" class="form-control" id="profession" name="profession" value="{{ old('profession') }}">
+                                @error('profession')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
 
+                            <h5 class="mt-4 mb-3 text-secondary border-bottom pb-2">Informations de Connexion</h5>
                             <div class="col-md-6">
-                                <label for="profession" class="form-label">Profession</label>
-                                <input type="text" class="form-control" id="profession" name="profession" value="{{ old('profession') }}">
-                                @error('profession')
+                                <label for="email" class="form-label fw-bold">Email (Login) <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
+                                <div class="form-text">Cet email servira d'identifiant unique.</div>
+                                @error('email')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="password" class="form-label fw-bold">Mot de passe <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="password" name="password" value="{{ old('password', 'password') }}" required>
+                                <div class="form-text">Le parent pourra modifier ce mot de passe.</div>
+                                @error('password')
                                     <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
