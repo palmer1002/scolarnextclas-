@@ -108,6 +108,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/messages/{user}', [\App\Http\Controllers\MessageController::class, 'show'])->name('messages.show');
     Route::post('/messages', [\App\Http\Controllers\MessageController::class, 'store'])->name('messages.store');
 
+
+
     // Paiements
     Route::get('/paiements/{paiement}/download', [\App\Http\Controllers\PaiementController::class, 'downloadReceipt'])->name('paiements.download');
     Route::resource('paiements', \App\Http\Controllers\PaiementController::class);

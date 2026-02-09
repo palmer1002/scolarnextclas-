@@ -78,6 +78,7 @@
             width: 20px;
             text-align: center;
         }
+        @stack('styles')
     </style>
 </head>
 <body>

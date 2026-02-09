@@ -126,6 +126,15 @@
                     </div>
                 @enderror
             </div>
+            <div class="mb-3 text-start">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="acceptPrivacy" required>
+                    <label class="form-check-label text-muted" for="acceptPrivacy" style="font-size: 0.85rem;">
+                        J'ai lu et j'accepte la <a href="{{ route('privacy') }}" target="_blank" style="color: #170B9D; font-weight: 500;">politique de confidentialité</a> <i class="fa-solid fa-circle-check text-success"></i>
+                    </label>
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-login">
                 <i class="fas fa-sign-in-alt"></i> Se connecter
             </button>
@@ -162,6 +171,7 @@
         document.getElementById('login-form').addEventListener('submit', function(e) {
             const email = document.getElementById('email').value;
             const passwordVal = document.getElementById('password').value;
+            const acceptPrivacy = document.getElementById('acceptPrivacy').checked;
             const errorDiv = document.getElementById('error-message');
             
             // Réinitialiser les erreurs
@@ -172,6 +182,13 @@
             if (!email || !passwordVal) {
                 e.preventDefault(); 
                 errorDiv.textContent = 'Veuillez remplir tous les champs.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (!acceptPrivacy) {
+                e.preventDefault();
+                errorDiv.textContent = 'Vous devez accepter la politique de confidentialité pour vous connecter.';
                 errorDiv.style.display = 'block';
                 return;
             }

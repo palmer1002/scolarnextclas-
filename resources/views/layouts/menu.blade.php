@@ -132,9 +132,10 @@
         </a>
     </li>
 
+
     <li class="nav-item border-top pt-2">
         <a href="{{ route('privacy') }}" class="nav-link" style="color: rgba(255,255,255,0.7); font-size: 0.8rem;">
-            <i class="fa-solid fa-shield-halved"></i> Confidentialité
+            <i class="fa-solid fa-shield-halved"></i> Confidentialité <i class="fa-solid fa-circle-check ms-1 text-success"></i>
         </a>
     </li>
 
